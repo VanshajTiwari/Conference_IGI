@@ -1,0 +1,8 @@
+const App=require("./App");
+const Mongoose=require("mongoose");
+const dotenv=require('dotenv');
+const path=require('path');
+dotenv.config({path:path.join(__dirname,"cofig.env")});
+Mongoose.connect(process.env.CONN_STRING,{family:4}).then(_=>console.log("DB Connected")).catch(err=>{console.log("Mongoose Error :",err)});
+
+App.listen("8080",()=>{console.log("http://127.0.0.1:8080")});

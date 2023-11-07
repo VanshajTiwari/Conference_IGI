@@ -1,0 +1,27 @@
+{
+  "name": "project1_chatapplication",
+  "version": "1.0.0",
+  "description": "Application for Chatting with Friends",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VanshajTiwari/Chatting_App.git"
+},
+  "author": "Vanshaj Tiwari",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.0",
+    "nodemailer": "^6.9.7",
+    "validator": "^13.11.0"
+  }
+}
