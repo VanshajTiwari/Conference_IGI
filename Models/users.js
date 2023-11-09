@@ -1,8 +1,8 @@
 const Mongoose=require("mongoose");
 const validator=require('validator');
-const bcrypt=require('bcryptjs');
+const bcrypt=require('bcrypt');
 const crypto=require('crypto');
-const usersSchema=Mongoose.Schema({
+const usersSchema=new Mongoose.Schema({
     fullname:{
         type:String,
         minlength:1,
@@ -14,7 +14,7 @@ const usersSchema=Mongoose.Schema({
         required:[true,"User Must Have Email"],
         validate:[validator.isEmail,"Please Provide Valid Email"],
     },
-    password:{
+    password:{ 
         type:String,
         require:[true,"Users Must Have Password"]
     },
@@ -57,13 +57,13 @@ const usersSchema=Mongoose.Schema({
 usersSchema.pre('save',async function(next){
     this.password=await bcrypt.hash(this.password,12);
    
-    this.confirmpassword=undefined;
+    this.confirmpassword="";
     next();
 });
 
-usersSchema.methods.correctPassword = async function(candidatePassword) {
+usersSchema.methods.correctPassword = async function(candidatePassword,password) {
     try {
-      return await bcrypt.compare(candidatePassword, this.password);
+      return await bcrypt.compare(candidatePassword, password);
     } catch (error) {
       throw new Error(error);
     }
@@ -80,4 +80,4 @@ usersSchema.methods.correctPassword = async function(candidatePassword) {
 const Users=Mongoose.model("Users",usersSchema);
 
     
-module.exports=Users;
+module.exports=Users; 

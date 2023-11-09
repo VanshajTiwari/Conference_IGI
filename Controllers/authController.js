@@ -14,7 +14,7 @@ exports.login=async(req,res)=>{
     let token=null;
     const {email,candidatePassword}=req.body;
     let user=await Users.findOne({email}).select("+password");
-   // console.log(await Users.correctPassword(candidatePassword,user.password));   ///////
+    console.log(await Users.correctPassword(candidatePassword,user.password));   ///////
      if(!user )//|| !Users.correctPassword(candidatePassword,user.password))
      {
          res.status(200).json({status:"Fail",message:"Email or Password is Wrong"});
