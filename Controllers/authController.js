@@ -14,6 +14,7 @@ exports.login=async(req,res)=>{
     let token=null;
     const {email,candidatePassword}=req.body;
     let user=await Users.findOne({email}).select("+password");
+    console.log({user},{req:req.body})
     console.log(await Users.correctPassword(candidatePassword,user.password));   ///////
      if(!user )//|| !Users.correctPassword(candidatePassword,user.password))
      {

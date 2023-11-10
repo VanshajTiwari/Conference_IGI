@@ -61,7 +61,8 @@ usersSchema.pre('save',async function(next){
     next();
 });
 
-usersSchema.methods.correctPassword = async function(candidatePassword,password) {
+usersSchema.methods.correctPassword = async (candidatePassword,password) =>{
+    console.log("asdaskdmaksdmkasd");
     try {
       return await bcrypt.compare(candidatePassword, password);
     } catch (error) {
