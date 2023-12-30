@@ -9,12 +9,16 @@ const conversation=Mongoose.Schema({
         type:Mongoose.Schema.Types.ObjectId,
         ref:"Users"
     },
-    msg:{
+    chat:{
         type:String
     },
-    sentime:Date.now()
+    sentime:{
+        type:Date,
+        default:Date.now()}
 
-});
+}
+// ,{ strictPopulate: false }
+);
 
 const Conversation=Mongoose.model("conversation",conversation);
 module.exports=Conversation;

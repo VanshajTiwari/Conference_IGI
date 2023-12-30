@@ -1,4 +1,4 @@
-const Users=require("./../Models/users");
+const Users= require('./../Models/users');
 const jwt=require('jsonwebtoken');
 const crypt=require('crypto');
 const sendEmail=require('./../utils/sendEmail');
@@ -6,24 +6,25 @@ function generateToken(id){
       let option={
         expiresIn:'1h'
       }
-      
       token=jwt.sign({id:id},process.env.SECRET,{expiresIn: '2000s'});
       return token;
 }
 exports.login=async(req,res)=>{
-    let token=null;
-    const {email,candidatePassword}=req.body;
-    let user=await Users.findOne({email}).select("+password");
-    console.log({user},{req:req.body})
-    console.log(await Users.correctPassword(candidatePassword,user.password));   ///////
-     if(!user )//|| !Users.correctPassword(candidatePassword,user.password))
-     {
-         res.status(200).json({status:"Fail",message:"Email or Password is Wrong"});
-        return;
-        }
-    token=generateToken(user.id);
-    res.cookie("jwt",token,{secure:true});
-    res.status(200).json({status:"success",result:{token,user}})
+    try{
+        const {email,candidatePassword}=req.body;
+        let user=await Users.findOne({email}).select("+password");
+         if(!user || !user.correctPassword(candidatePassword,user.password))
+         {
+             res.status(200).json({status:"Fail",message:"Email or Password is Wrong"});
+            return;
+            }
+        token=generateToken(user.id);
+        res.cookie("jwt",token,{secure:true});
+        res.status(200).json({status:"success",result:{token,user}})
+    }
+    catch(err){
+        res.status(200).json({status:"failed",Error:err.message})
+    }
 };
 exports.signup=async(req,res)=>{
     const {fullname,email,password,confirmpassword}=req.body;
@@ -36,27 +37,32 @@ exports.signup=async(req,res)=>{
         }});
     
 };
-
+exports.logout=async(req,res)=>{
+    res.cookie("jwt","loggedout");
+    res.status(200).send("");
+}
 exports.protect=async(req,res,next)=>{
     try{
-        
-        if(!req.cookie || !req.cookies.jwt){
+
+        if(!req.cookies || !req.cookies.jwt){
             res.status(200).json({status:"failed",message:"unauthorised"});
+            return;
         }
-        token=req.cookie.jwt;
+        token=req.cookies.jwt;
         const decoded=await jwt.verify(token,process.env.SECRET);
-        console.log({decoded});
         const fresherUser=await Users.findOne({_id:decoded.id});
-    
         if(!fresherUser){
-                res.status(200).json({token:"USERS NO LONGER EXIST"});
+                res.status(200).json({status:"Failed",Error:"USERS NO LONGER EXIST"});
+                return;
     
         }
         req.user=fresherUser;
         res.locals.users=fresherUser; 
+        res.status(200).json({status:"success",user:fresherUser})
     }
     catch(err){
-        console.log("ERROR  :  ",err);
+        res.status(404).json({status:"failed",ERROR:err.message});
+
     } 
 }
 exports.restrictTo=(...roles)=>{

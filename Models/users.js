@@ -1,6 +1,6 @@
 const Mongoose=require("mongoose");
 const validator=require('validator');
-const bcrypt=require('bcrypt');
+const bcrypt=require('bcryptjs');
 const crypto=require('crypto');
 const usersSchema=new Mongoose.Schema({
     fullname:{
@@ -16,7 +16,8 @@ const usersSchema=new Mongoose.Schema({
     },
     password:{ 
         type:String,
-        require:[true,"Users Must Have Password"]
+        require:[true,"Users Must Have Password"],
+        select:false
     },
     confirmpassword:{
         type:String,
@@ -61,8 +62,11 @@ usersSchema.pre('save',async function(next){
     next();
 });
 
+usersSchema.methods.Y1=function(){
+    console.log("Hello");
+}
 usersSchema.methods.correctPassword = async (candidatePassword,password) =>{
-    console.log("asdaskdmaksdmkasd");
+
     try {
       return await bcrypt.compare(candidatePassword, password);
     } catch (error) {
@@ -72,12 +76,13 @@ usersSchema.methods.correctPassword = async (candidatePassword,password) =>{
 // usersSchema.methods.correctPassword=async function(candidatePassword,userPassword){
 //         return await bcrypt.compare(candidatePassword,userPassword);
 //       };
- usersSchema.methods.resetPassword=function(){
+ usersSchema.statics.resetPassword=function(){
     const reset=crypto.randomBytes(32).toString('hex');
     this.passswordResetToken=crypto.createHash('sha256').update(reset).digest('hex');
-    this.passwordResetExpires=date.now()+10*60*1000
+    this.passwordResetExpires=Date.now()+10*60*1000
     return reset;
- }
+ };
+
 const Users=Mongoose.model("Users",usersSchema);
 
     

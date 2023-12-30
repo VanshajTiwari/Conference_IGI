@@ -1,20 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>Document</title>
-  
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-</head>
+<%- include('./commons/boiler.ejs') %>
 <body>
     <header >
         <nav class="pt-3">
            <!-- component -->
-
-                
+              
                 <div class="antialiased bg-gray-100 dark-mode:bg-gray-900">
                 <div class="w-full text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800">
                     <div x-data="{ open: true }" class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
@@ -32,8 +21,8 @@
                         <a class="px-3 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#"><i class="fa-solid fa-stairs"></i> Steps</a>
                         <a class="px-3 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#about--0"><i class="fa-solid fa-address-card"></i> About</a>
                         <a class="px-3 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#footer--0"><i class="fa-solid fa-earth-americas"></i> Contact</a>
-                        <a class="px-4 py-2 mt-2 text-sm font-semibold bg-gray-200 rounded-lg    dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 focus:text-gray-900 hover:bg-gray-200   hover:bg-green-400 focus:bg-gray-200 focus:outline-none focus:shadow-outline signup--link" href="./signup.html"><i class="fa-solid fa-user"></i> SignUp</a>
-                        <a class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-blue-600  focus:text-blue-600   focus:outline-none focus:shadow-outline signin--link" href="./login.html"><i class="fa-solid fa-user-plus"></i> SignIn &rarr;</a>
+                        <a class="px-4 py-2 mt-2 text-sm font-semibold bg-gray-200 rounded-lg    dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 focus:text-gray-900 hover:bg-gray-200   hover:bg-green-400 focus:bg-gray-200 focus:outline-none focus:shadow-outline signup--link" href="/signup"><i class="fa-solid fa-user"></i> SignUp</a>
+                        <a class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-blue-600  focus:text-blue-600   focus:outline-none focus:shadow-outline signin--link" href="/login"><i class="fa-solid fa-user-plus"></i> SignIn &rarr;</a>
                           
                     </nav>
                     </div>
@@ -231,6 +220,6 @@
       </p>
     </div>
   </footer>
-    <script src="./customScript.js"></script>
+    
 </body>
 </html>
