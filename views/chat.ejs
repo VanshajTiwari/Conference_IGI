@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-    <script src="./customScript.js" defer></script>
-    <title>Chat BOX 🔴</title>
-</head>
+<%- include("./commons/boiler") %>
 <body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+      const socket = io("http://127.0.0.1:7575");
+      socket.on('connect',()=>{
+          socket.emit("send-rooms",{id:socket.id});
+      });
+  </script>
     <!-- component -->
     <%- include("./commons/header")%>
     <div class="p-4 xl:ml-80">
@@ -78,18 +75,12 @@
       <div class="bg-red-500 p-4 w-full min-h-16 h-auto rounded-lg">
         <div>
           <div class="flex justify-between">
-            <div class="users mx-1 w-[25%] max-h-[510px] overflow-x-hidden overflow-auto">
-              <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer">
-                  <h3 class="font-bold">User</h3>
-                  <p class="text-gray-400">~ This is message</p>
-              </div>
-                <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer">
-                  <h3 class="font-bold">User</h3>
-                  <p class="text-gray-400">~ This is message</p>
+            <div class="users mx-1 w-[25%] h-[510px] overflow-x-hidden overflow-auto users--rooms">
+           
+  <!--                                            -->
             
             </div>
-            </div>
-            <div class="__inbox w-[72%] mt-2">
+            <div class="__inbox w-[85%] mt-2">
                 <div class="bg-gray-50 ">
                   <div class="p-1 flex items-center">
                           <div class="m-2">
@@ -101,35 +92,25 @@
                                   <h1 class="font-medium">Users</h1>
                                   <span class="font-sans text-xs ml-2">Status</span>
                               </div>
-                          </div>
+                          </div> 
                   </div>
-                  <div class="lg:min-h-[390px] overflow-auto bg-blue-500">
+                  <div class="max-h-[390px] overflow-auto bg-blue-500 messageBox">
 
-                                <!-- messages -->
-                                <div class="bg-red-100 float-right  clear-both px-2 py-1 m-3 rounded-lg">
-                                  <div class="font-medium max-w-[500px]">Hello, This is Message</div>
-                                  <div class="font-sans flex justify-between">
-                                    <span class="text-xs text-gray-500">12:00</span>
-                                    <span class="text-xs">Read</span>
-                                  </div>
-                                </div>
-                                <div class="bg-red-100 float-left clear-both px-2 py-1 m-3 rounded-lg">
-                                  <div class="font-medium max-w-[500px]">Hello, This is Message</div>
-                                  <div class="font-sans flex justify-between">
-                                    <span class="text-xs text-gray-500">12:00</span>
-                                    <span class="text-xs">Read</span>
-                                  </div>
-                                </div>
+                                <!-- messages    -->
+                                <!-- send Msg    -->
+                                <!-- message Msg -->
+                                
                   </div>
-                  <div><form action="" class="bg-yellow-500 flex justify-around w-full">
+                  <div>
+                    <form action="" class="bg-yellow-500 flex justify-around w-full --send-message-form">
                     
                       
-                      <input type="file" class="hidden" id="file--0" >
+                      <input type="file" class="hidden" name="files" id="file--0" >
                       <i class="fa-solid fa-plus p-3 file--00"></i>
-  
-                    <input type="text" class="w-10/12 p-1">
-                    <input type="submit" value="submit" class="p-2">
-                  </form></div>
+                      <input type="text" name="message" class="w-10/12 p-1">
+                      <input type="submit" value="submit" class="p-2">
+                    </form>
+                  </div>
                 </div>
             </div>
           </div>
@@ -146,6 +127,68 @@
         </footer>
       </div>
       </div>
+      <script>
+            ////////////////////////////////////////////////////////////////////////////
+            let rooms=[];
+            const send__Struct=(message)=>`
+                                        <div class="bg-red-100 float-right clear-both px-2 py-1 m-3 rounded-lg">
+                                          <div class="font-medium max-w-[500px]">${message}</div>
+                                          <div class="font-sans flex justify-between">
+                                            <span class="text-xs text-gray-500">${(new Date()).toLocaleString()}</span>
+                                            <span class="text-xs">Read</span>
+                                          </div>
+                                        </div>`
+            const recieve__Struct=(message)=>`
+                                        <div class="bg-red-100 float-left clear-both px-2 py-1 m-3 rounded-lg">
+                                          <div class="font-medium max-w-[500px]">${message}</div>
+                                          <div class="font-sans flex justify-between">
+                                            <span class="text-xs text-gray-500">${(new Date()).toLocaleString()}</span>
+                                            <span class="text-xs">Read</span>
+                                          </div>
+                                        </div>`
+            const messageBox=document.querySelector('.messageBox');
+            const sendMsgForm=document.querySelector(".--send-message-form");
+            console.log(sendMsgForm);
+            sendMsgForm.addEventListener("submit",(e)=>{
+                e.preventDefault();
+                const sendMessage=document.createElement('div');
+                sendMessage.innerHTML=send__Struct(e.target[1].value);
+                messageBox.appendChild(sendMessage);
+                //////////////////////////////////////////////////////////////////////////////
+                
+                socket.emit('send-message',{message:e.target[1].value,senderId:socket.id});
+                //////////////////////////////////////////////////////////////////////////////
+                e.target.reset();
+            });
+            ////////////////////////////////////////////////////////////////////////////
 
+            socket.on('receive-message',({message})=>{
+              console.log(message);
+              const recieveMessage=document.createElement('div');
+              recieveMessage.innerHTML=recieve__Struct(message);
+              messageBox.appendChild(recieveMessage);
+            });
+
+            ////////////////////////////////////////////////////////////////////////////
+            socket.on("show-rooms",({rooms})=>{
+                  const usersRooms=document.querySelector(".users--rooms");
+                  function customElement(rooms){
+                      return `
+                      <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
+                      <h3 class="font-bold">${rooms}</h3>
+                      <p class="text-gray-400">~ This is message</p>
+                      </div>
+                      `}
+                      
+                      for(let i=0;i<rooms.length;i++){
+                        const newRoom=document.createElement("div");
+                        newRoom.innerHTML=customElement(rooms[i]);
+                        usersRooms.appendChild(newRoom);
+                      }
+                  });
+            ////////////////////////////////////////////////////////////////////////////
+            
+        </script>
       </body>
+
       </html>
