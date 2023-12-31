@@ -8,7 +8,7 @@ Route.get("/",(req,res)=>{
 Route.get("/dashboard",(req,res)=>{
     res.status(200).render("dashboard.ejs",{title:"Dashboard"});
 })
-Route.get("/meeting",(req,res)=>{
+Route.get("/dashboard/meeting",(req,res)=>{
     res.status(200).render("meeting.ejs",{title:"Meeting"});
 })
 Route.get("/login",(req,res)=>{
@@ -17,13 +17,13 @@ Route.get("/login",(req,res)=>{
 Route.get("/signup",(req,res)=>{
     res.status(200).render("signup.ejs",{title:"Signup"});
 })
-Route.get("/chats",(req,res)=>{
+Route.get("/dashboard/chats",(req,res)=>{
     res.status(200).render("chat.ejs",{title:"Chatting"});
 })
-Route.get("/allmeeting",(req,res)=>{
+Route.get("/dashboard/allmeeting",(req,res)=>{
     res.status(200).render("AllMeeting.ejs",{title:"Schedules"});
 })
-Route.get("/profile",(req,res)=>{
+Route.get("/dashboard/profile",(req,res)=>{
     res.status(200).render("profile.ejs",{title:"Profile"});
 })
 
