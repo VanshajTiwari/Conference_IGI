@@ -1,20 +1,28 @@
 const Mongoose=require('mongoose');
 
 const conversation=Mongoose.Schema({
-    sender:{
-        type:Mongoose.Schema.Types.ObjectId,
-        ref:"Users"
-    },
-    receiver:{
-        type:Mongoose.Schema.Types.ObjectId,
-        ref:"Users"
-    },
-    chat:{
-        type:String
-    },
-    sentime:{
-        type:Date,
-        default:Date.now()}
+    chats:[
+        {
+            sender:{
+                type:Mongoose.Schema.Types.ObjectId,
+                ref:"users",
+                required:[true,"sender undefined"]
+            },
+            receiver:{
+                    type:Mongoose.Schema.Types.ObjectId,
+                    ref:"users",
+                    required:[true,"sender undefined"]
+            },
+            message:{
+                type:String,
+                minlength:1,
+            },
+            createAt:{
+                type:Date,
+                default:Date.now()
+            }
+        }
+    ]
 
 }
 // ,{ strictPopulate: false }

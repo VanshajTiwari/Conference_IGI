@@ -6,11 +6,12 @@ const userRouter=require("./Routes/userRoute");
 const chatRouter=require("./Routes/ChatRoute");
 const viewRouter=require('./Routes/viewRoute');
 const {Server}=require('socket.io');
+const expressSession=require('express-session');
 //SET VIEW ENGINE
 App.use(cookieParser());
 App.use(Express.json());
 App.use(Express.urlencoded({extended:true}));
-App.use("/",Express.static(path.join(__dirname,"public")));
+App.use("/",Express.static(path.join(__dirname,"Public")));
 App.set("view-engine","ejs");
 App.set("views",path.join(__dirname,"views"));
 
@@ -18,9 +19,13 @@ App.set("views",path.join(__dirname,"views"));
 const io=new Server(App.listen("7575",()=>{console.log("http://127.0.0.1:7575")}));
 
 
-
-App.use("/",viewRouter);
+App.use(expressSession({
+    secret:"knsdnakfnd",
+    resave:false,
+    saveUninitialized:false
+}))
 App.use("/users",userRouter);
+App.use("/",viewRouter);
 App.use("/users",chatRouter);
 App.all("*",(req,res)=>{
     res.status(404).render("404page.ejs");
