@@ -103,12 +103,12 @@
               </svg>
             </div>
             <div class="p-4 text-right">
-              <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">User</p>
-              <h4 class="block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-blue-gray-900">GLA University</h4>
+              <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600"><%=user.fullname%></p>
+              <h4 class="block antialiased tracking-normal font-sans text-xl font-semibold leading-snug text-blue-gray-900"><%=user.InstitutionDetails[0].institution%></h4>
             </div>
             <div class="border-t border-blue-gray-50 p-4">
               <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                <strong class="text-green-500">Assistant Professor</strong>
+                <strong class="text-green-500"><%=user.InstitutionDetails[0].role%></strong>
               </p>
             </div>
           </div>

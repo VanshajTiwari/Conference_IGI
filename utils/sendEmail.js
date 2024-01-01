@@ -10,7 +10,7 @@ const sendMail=async(options)=>{
          }
         });
     const mailOption={
-            from:'Vanshaj tiwari vanshajtiwari6',
+            from:'Vanshaj tiwari <vanshajtiwari62gmail.com>',
             to:options.email,
             subject:options.subject,
             text:options.message,

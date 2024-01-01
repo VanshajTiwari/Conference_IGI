@@ -2,6 +2,8 @@ const Users= require('./../Models/users');
 const jwt=require('jsonwebtoken');
 const crypt=require('crypto');
 const sendEmail=require('./../utils/sendEmail');
+const institutionModel = require('./../Models/institutionModel');
+
 function generateToken(id){
       let option={
         expiresIn:'1h'
@@ -11,18 +13,21 @@ function generateToken(id){
 }
 exports.login=async(req,res)=>{
     try{
-        const {email,candidatePassword}=req.body;
-        let user=await Users.findOne({email}).select("+password");
-         if(!user || !user.correctPassword(candidatePassword,user.password))
+        const {email,password}=req.body;
+        let user=await Users.findOne({email}).select("+password").populate('InstitutionDetails');
+         if(!user ||!await user.correctPassword(password,user.password))
          {
              res.status(200).json({status:"Fail",message:"Email or Password is Wrong"});
             return;
             }
         token=generateToken(user.id);
         res.cookie("jwt",token,{secure:true});
-        res.status(200).json({status:"success",result:{token,user}})
+
+        req.session.user=user;
+       res.redirect("/dashboard");
     }
     catch(err){
+        console.log("in login");
         res.status(200).json({status:"failed",Error:err.message})
     }
 };
@@ -30,16 +35,30 @@ exports.signup=async(req,res)=>{
     const {fullname,email,password,confirmpassword}=req.body;
     const data=await Users.create({fullname,email,password,confirmpassword});
     token=generateToken(data.id);
+    req.session.user=data;
     res.cookie("jwt",token,{secure:true});
-        res.status(201).json({status:"success",result:{
-            token,
-            data
-        }});
+    res.redirect("/dashboard");
     
 };
+exports.fillD=async(req,res)=>{
+    const user=req.session.user;
+    const {institution,institutionAddress,userAddress,username,role,mobile,TimeZone}=req.body;
+    const inst=new institutionModel({user,institution,institutionAddress,userAddress,username,role,mobile,TimeZone})
+    await inst.save();
+    res.status(200).send("Done");
+}
 exports.logout=async(req,res)=>{
-    res.cookie("jwt","loggedout");
-    res.status(200).send("");
+    res.cookie("jwt","");
+    req.session.destroy();
+    res.redirect("/");
+}
+exports.isLoggedin=(req,res,next)=>{
+    
+
+    if(!req.session.user){
+      return res.redirect("/login");
+    }
+    return next();
 }
 exports.protect=async(req,res,next)=>{
     try{
@@ -58,7 +77,7 @@ exports.protect=async(req,res,next)=>{
         }
         req.user=fresherUser;
         res.locals.users=fresherUser; 
-        res.status(200).json({status:"success",user:fresherUser})
+        next();
     }
     catch(err){
         res.status(404).json({status:"failed",ERROR:err.message});
