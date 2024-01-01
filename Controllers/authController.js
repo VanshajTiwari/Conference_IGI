@@ -12,7 +12,6 @@ function generateToken(id){
       return token;
 }
 exports.login=async(req,res)=>{
-    console.log("running loggedin");
     try{
         const {email,password}=req.body;
         let user=await Users.findOne({email}).select("+password").populate('InstitutionDetails');
@@ -25,7 +24,6 @@ exports.login=async(req,res)=>{
         res.cookie("jwt",token,{secure:true});
 
         req.session.user=user;
-        console.log(user);
        res.redirect("/dashboard");
     }
     catch(err){
@@ -37,10 +35,10 @@ exports.signup=async(req,res)=>{
     const {fullname,email,password,confirmpassword}=req.body;
     const data=await Users.create({fullname,email,password,confirmpassword});
     token=generateToken(data.id);
-    req.sesssion.user=data;
+    req.session.user=data;
     res.cookie("jwt",token,{secure:true});
-   
-    res.render('dashboard.ejs',{title:"Dashboard",user:req.user});
+    res.redirect("/dashboard");
+    
 };
 exports.fillD=async(req,res)=>{
     const user=req.session.user;

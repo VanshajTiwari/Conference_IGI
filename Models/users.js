@@ -16,12 +16,12 @@ const userSchema=new Mongoose.Schema({
     },
     password:{ 
         type:String,
-        require:[true,"Users Must Have Password"],
+        required:[true,"Users Must Have Password"],
         select:false
     },
     confirmpassword:{
         type:String,
-        require:[true,"Confirm Password Field is Empty"],
+        required:[true,"Confirm Password Field is Empty"],
         validate:{
             validator:function(el){
                 console.log("oasssword :",el);
