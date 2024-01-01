@@ -21,10 +21,11 @@ const InstiSchema=new Mongoose.Schema({
     },
     mobile:{
         type:Number,
-        require:[true,"number Required"]
+        required:[true,"number Required"]
     },
-    TimeZone:{
-        type:Date
+    designation:{
+        type:String,
+        required:[true,String]
     }
 });
 
