@@ -2,6 +2,11 @@ const Mongoose=require('mongoose');
 
 
 const meetingSchema=new Mongoose.Schema({
+    createdBy:{
+        type:Mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        required:[true,"created must Assigned"]
+    },
     host:[{
         type:Mongoose.Schema.Types.ObjectId,
         ref:"users"
@@ -22,23 +27,25 @@ const meetingSchema=new Mongoose.Schema({
         ref:"users"
     }],
     participants:{
-        type:Mongoose.Schema.Types.ObjectId,
+        type:Mongoose.Schema.Types.ObjectId, 
         ref:"users"
     },
     createdAt:{
         type:Date,
-        required:[true,"Meeting is Scheduled"]
+        required:[true,"Meeting is Scheduled"],
+        default:Date.now()
+    },
+    startAt:{
+        type:Date,
+        required:[true,"start timeing must be given"]
     },
     endAt:{
         type:Date
     },
-    type:{
-        type:String,
-        required:[true,"meeting is Scheduled"]
-    }
-    ,
     agenda:{
         type:String,
-        required:[true,"meeting is Scheduled"]
+        required:[true,"meeting is Scheduled agenda"]
     }
-})
+});
+
+module.exports=new Mongoose.model('meetings',meetingSchema);
