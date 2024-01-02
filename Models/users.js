@@ -68,7 +68,11 @@ userSchema.virtual("InstitutionDetails",{
     localField:"_id"
     
 });
-
+userSchema.virtual("ownMeetings",{
+    ref:"meetings",
+    foreignField:"createdBy",
+    localField:"_id"
+})
 
 userSchema.methods.correctPassword = async (candidatePassword,password) =>{
     try {

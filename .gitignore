@@ -1,4 +1,4 @@
+# .gitingore
 node_modules
 package-lock.json
-cofig.env
 config.env
