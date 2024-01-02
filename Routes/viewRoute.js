@@ -1,7 +1,7 @@
 const Express=require('express');
 const { isLoggedin } = require('../Controllers/authController');
 const Route=Express.Router();
-
+const meetingModel=require("./../Models/meeting");
 
 Route.get("/",(req,res)=>{ 
             res.status(200).render('index.ejs',{title:"Home"});
@@ -18,9 +18,10 @@ Route.get("/dashboard",(req,res)=>{
     const user=req.session.user;
     res.render("dashboard.ejs",{title:"Dashboard",user:user});
 });
-Route.get("/dashboard/meeting",(req,res)=>{
+Route.get("/dashboard/meeting",async (req,res)=>{
     const user=req.session.user;
-    res.status(200).render("meeting.ejs",{title:"Meeting",user});
+    const meetings=await meetingModel.find({createdBy:user});
+    res.status(200).render("meeting.ejs",{title:"Meeting",user,meetings});
 })
 Route.get("/dashboard/chats",(req,res)=>{
     const user=req.session.user;

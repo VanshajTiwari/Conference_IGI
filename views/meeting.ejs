@@ -67,7 +67,7 @@
           <div class="main-meeting--section--00 w-full min-h-[510px] bg-red-500 rounded-lg">
             <div class="text-white ">
                 <div class="top-meeting-section-00">
-                    <div class="p-5">
+                    <div class="pt-5 pl-5 pr-5 ">
                         <div>
                           <h1 class="font-bold">Schedule Meeting</h1>
                         
@@ -75,20 +75,20 @@
                         <div class="w-full border-2 bg-gray-900"></div>
                         <div class="rounded-lg mt-2 w-full h-16 bg-gray-200">
                           <div>
-                            <form action="" class="text-black p-4 flex justify-between align-middle">
+                            <form class="text-black p-4 flex justify-between align-middle" action="/meeting/addmeeting" method="post">
                               <div>
                               <label for="schedule_date">Date : </label>
-                              <input type="Date" id="schedule_date">
+                              <input type="Date" id="schedule_date" name="date" required>
                               <label for="">Time : </label>
-                              <input type="time" id="schedule_time">
+                              <input type="time" id="schedule_time" name="time" required>
                               <label for="meeting_type">Type : </label>
-                              <select name="meeting_type" id="meeting_type" >
+                              <select name="meeting_type" id="meeting_type" required>
                                 <option value="" selected disabled>Select</option>
-                                <option value="0">Urgent!</option>
-                                <option value="1">Lecture</option>
-                                <option value="2">Event</option>
-                                <option value="3">Meeting</option>
-                                <option value="4">Meetup</option>
+                                <option value="urgent">Urgent!</option>
+                                <option value="lecture">Lecture</option>
+                                <option value="event">Event</option>
+                                <option value="meeting">Meeting</option>
+                                <option value="meetup">Meetup</option>
                               </select>
                               </div>
                               <button type="submit"class="hover:bg-red-400 hover:text-white transition-all p-2 text-red-600 rounded-lg">Schedule Meeting</button>
@@ -102,23 +102,26 @@
                     <div>
                       <h1 class="font-bold">Meeting You Schedule</h1>
                       <div class="w-full border-2 bg-gray-900"></div>
-                      <div class="my_meeting_cards">
-                        <div class="mt-6 flex w-64 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+                      <div class="my_meeting_cards h-[280px] flex mt-2 gap-x-4">
+                        <%for(let i of meetings){%>
+                        <div class="clear-both w-auto rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+                          
                           <div class="p-6 pb-0">
                             <i class="fa-solid fa-business-time mb-4 text-5xl h-12 w-12 text-red-500"></i>
                             <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-                              Agenda
+                              <%=(i.agenda.charAt(0)).toUpperCase()+(i.agenda).slice(1)%>
                             </h5>
                             
-                              <pre class="font-normal flex-col leading-relaxed antialiased">
-<span>Time: 12:00 Am</span>
-<span>Type: Urgent!</span>
-<span>UserID: @Vanshaj</span>
-<span>password: 12345</span>
-                              </pre>
+                              <div class="font-normal leading-relaxed antialiased">
+                                  <span>Time: <%=i.startAt%></span><br/>
+                                  <span>Type: <%=i.agenda%></span><br/>
+                                  <span>UserID: <%=i.meetingID%></span><br/>
+                                  <span>password:<%=i.password%></span>
+                              </div>
                            
                           
                           </div>
+                         
                           <div class="p-6 pt-0">
                             <a
                               class="!font-medium !text-red-900 !transition-colors hover:!text-red-500"
@@ -149,6 +152,7 @@
                             </a>
                           </div>
                         </div>
+                        <% } %>
                         
                       </div>
                     </div>
@@ -165,7 +169,7 @@
                     <div class="meeting--cards">
                         <div class="overflow-x-auto flex gap-x-6 pb-3">
                           <!-- component -->
-<div class="mt-6 flex w-64 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+<div class="mt-6 flex w-64 float-left clear-both rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
   <div class="p-6 pb-0">
     <i class="fa-solid fa-business-time mb-4 text-5xl h-12 w-12 text-red-500"></i>
     <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">

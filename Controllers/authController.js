@@ -14,7 +14,7 @@ function generateToken(id){
 exports.login=async(req,res)=>{
     try{
         const {email,password}=req.body;
-        let user=await Users.findOne({email}).select("+password").populate('InstitutionDetails');
+        let user=await Users.findOne({email}).select("+password").populate('InstitutionDetails').populate('ownMeetings');
          if(!user ||!await user.correctPassword(password,user.password))
          {
              res.status(200).json({status:"Fail",message:"Email or Password is Wrong"});
