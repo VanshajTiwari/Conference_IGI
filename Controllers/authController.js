@@ -3,7 +3,7 @@ const jwt=require('jsonwebtoken');
 const crypt=require('crypto');
 const sendEmail=require('./../utils/sendEmail');
 const institutionModel = require('./../Models/institutionModel');
-
+const slug =require('slug');
 function generateToken(id){
       let option={
         expiresIn:'1h'
@@ -24,11 +24,13 @@ exports.login=async(req,res)=>{
         res.cookie("jwt",token,{secure:true});
 
         req.session.user=user;
-       res.redirect("/dashboard");
+    if(!user.InstitutionDetails[0])
+       return res.redirect("/dashboard/profile/filldetails");
+    return res.redirect("/dashboard");
     }
     catch(err){
         console.log("in login");
-        res.status(200).json({status:"failed",Error:err.message})
+        return res.status(200).json({status:"failed",Error:err.message})
     }
 };
 exports.signup=async(req,res)=>{
@@ -37,24 +39,38 @@ exports.signup=async(req,res)=>{
     token=generateToken(data.id);
     req.session.user=data;
     res.cookie("jwt",token,{secure:true});
-    res.redirect("/dashboard");
-    
-};
+    return res.redirect("/dashboard/profile/filldetails");
+     
+}; 
 exports.fillD=async(req,res)=>{
-    const user=req.session.user;
-    const {institution,institutionAddress,userAddress,username,role,mobile,TimeZone}=req.body;
-    const inst=new institutionModel({user,institution,institutionAddress,userAddress,username,role,mobile,TimeZone})
-    await inst.save();
-    res.status(200).send("Done");
+    try{
+        const {institution,institutionAddress,userAddress,username,role,mobile,TimeZone}=req.body;
+        const user=req.session.user;
+        const employID=slug(institution)+"-"+req.session.user.id;
+        const {InstitutionDetails}=await Users.findById(req.session.user.id).populate("InstitutionDetails");
+        console.log(InstitutionDetails[0]);
+        if(InstitutionDetails[0]){
+            const instiDetails=await institutionModel.findOne({user});
+            console.log({instiDetails});
+            const newDat=await institutionModel.updateOne({_id:instiDetails.id},{user,employID,institution,institutionAddress,userAddress,username,role,mobile,TimeZone});
+            return res.status(200).json({status:"UPDATED",newDat});
+
+        }
+        const inst=new institutionModel({employID,user,institution,institutionAddress,userAddress,username,role,mobile,TimeZone})
+        await inst.save();
+        res.status(200).send("Done");
+    }
+    catch(err){
+
+        res.status(400).json({status:"error",message:err});
+    }
 }
 exports.logout=async(req,res)=>{
     res.cookie("jwt","");
     req.session.destroy();
     res.redirect("/");
 }
-exports.isLoggedin=(req,res,next)=>{
-    
-
+exports.isLoggedin=(req,res,next)=>{ 
     if(!req.session.user){
       return res.redirect("/login");
     }
