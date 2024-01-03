@@ -7,25 +7,20 @@ const InstiSchema=new Mongoose.Schema({
         type:Mongoose.Types.ObjectId,
         ref:"users"
     },
-    userAddres:String,
-    username:{
+    employID:{
         type:String,
-        distinct:true,
-        required:[true,"username missing"]
+        required:[true,"ID Must assigned"]
     },
+    userAddress:String,
     role:{
         type:String,
-        role:['faculty',"student","staff","dean","registerar"],
+        role:['Assistant Professor',"student","Professor","Dean","CEO","Registrar","Placement Head","Training Coach"],
         required:[true,'users belongs to Role']
 
     },
     mobile:{
         type:Number,
         required:[true,"number Required"]
-    },
-    designation:{
-        type:String,
-        required:[true,String]
     }
 });
 
