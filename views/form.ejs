@@ -1,19 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="/users/fillDetails" method="post">
-        <input type="text" name="institution">
-        <input type="text" name="institutionAddress">
-        <input type="text" name="userAddres">
-        <input type="text" name="role">
-        <input type="text" name="username">
-        <input type="text" name="mobile">
-        <input type="submit">
-    </form>
+<%- include("./commons/boiler") %>
+<body class="w-full h-full bg-gray-200 flex justify-center items-center">
+    <div class=" p-4 flex flex-col rounded-lg w-1/2">
+        <div class="text-[25px] flex justify-center p-3">
+            <h1>Details Regarding Institution</h1>
+        </div>
+        <form action="/users/fillDetails" method="post" class="bg-gray-100 shadow-lg p-3 rounded-lg --details--institution">
+            <div class="flex flex-col m-3">
+                <label for="institution" class="text-[20px]">Institution Name*</label>
+                <input type="text" name="institution" class="text-[18px] p-3" placeholder="Institution Name">
+            </div>
+            <div class="flex flex-col m-3">
+                <label for="institutionAddress" class="text-[20px]">Institution Address*</label>
+                <input type="text" name="institutionAddress"  class="text-[18px] p-3" placeholder="Institution Address">
+            </div>
+            <div class="flex flex-col m-3">
+                <label for="userAddres" class="text-[20px]">User Address*</label>
+                <input type="text" name="userAddress" class="text-[18px] p-3" placeholder="User Address">
+            </div>
+            <div class="flex flex-col m-3">
+                <label for="role"class="text-[20px]">Designation*</label>
+                <input type="text" name="role" class="text-[18px] p-3" placeholder="Designation">
+            </div>
+            <div class="flex flex-col m-3">
+                <label for="username" class="text-[20px]">Username*</label>
+                <input type="text" name="username" class="text-[18px] p-3" placeholder="Username">
+            </div>
+            <div class="flex flex-col m-3">
+                <label for="mobile" class="text-[20px]">Mobile no.*</label>
+                <input type="text" name="mobile" class="text-[18px] p-3" placeholder="Mobile Number">
+            </div>
+            <div class="flex flex-col m-3">
+                <label for="request" class="text-[20px]">Any Message</label>
+                <textarea name="" id="" cols="10" rows="6" class="text-[18px] p-3" placeholder="Any Message"></textarea>
+            </div>
+            <div class="text-[20px] m-3">
+                <input type="checkbox">
+                <label for="checkbox">Accept Terms and Conditions</label>
+            </div>
+            <div>
+                <input type="submit" class="pr-5 pl-5 m-4 pt-1 pb-1 bg-gray-200 transition-all duration-200 rounded-lg hover:bg-gray-300">
+            </div>
+        </form>
+    </div>
+    <script>
+        const formInstitution=document.querySelector(".--details--institution");
+    </script>
 </body>
 </html>
