@@ -3,9 +3,6 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
       const socket = io("http://127.0.0.1:7575");
-      socket.on('connect',()=>{
-          socket.emit("send-rooms",{id:socket.id});
-      });
   </script>
     <!-- component -->
     <%- include("./commons/header")%>
@@ -76,23 +73,40 @@
         <div>
           <div class="flex justify-between">
             <div class="users mx-1 w-[25%] h-[510px] overflow-x-hidden overflow-auto users--rooms">
-           
-  <!--                                            -->
-            
+              <% for(let i of users){ %>
+                <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>" class="rooms">
+                    <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
+                        <h3 class="font-bold"><%=i.fullname%></h3>
+                        <p class="text-gray-400">~ This is message</p>
+                    </div>           
+                </a>                                 
+                <%}%>
             </div>
             <div class="__inbox w-[85%] mt-2">
                 <div class="bg-gray-50 ">
                   <div class="p-1 flex items-center">
+                    <%if(sender){%>
                           <div class="m-2">
                             <!-- <img src="" alt="">     div --> 
-                            <div class="w-[50px] h-[50px] bg-blue-500 rounded-full"></div>
+                            <div class="w-[50px] h-[50px] bg-blue-500 rounded-full overflow-hidden">
+                              <%if(sender.avatar){%>
+                              <img src="<%=sender.avatar%>" alt="pp" class="w-full h-auto">
+                              <%}else{%>
+                                <img src="/img/user.jpg" alt="user"/>
+                                <%}%>
+                            </div>
                           </div>
                           <div>
                               <div>
-                                  <h1 class="font-medium">Users</h1>
-                                  <span class="font-sans text-xs ml-2">Status</span>
+                                  <h1 class="font-medium"><%=sender.fullname%></h1>
+                                  <span class="font-sans text-xs ml-2 status--user">Status</span>
                               </div>
                           </div> 
+                              <%}else{ %>
+                                <div class="w-full bg-red-400 flex justify-center items-center">
+                                  <div class="text-[20px] font-bold">Super Chats</div>
+                                </div>
+                                <%}%>
                   </div>
                   <div class="max-h-[390px] overflow-auto bg-blue-500 messageBox">
 
@@ -115,12 +129,12 @@
             </div>
           </div>
         </div>
-      
       </div>
       <div class="text-blue-gray-600">
         <footer class="py-2">
             <div class="w-full pt-5 px-4 mb-8 flex ">
                 <div class="text-sm text-gray-700 py-1">
+                 
                     Made with <a class="text-gray-700 font-semibold" href="https://www.material-tailwind.com/docs/html/form?ref=tailwindcomponents" target="_blank">💖</a> by <a href="https://www.creative-tim.com?ref=tailwindcomponents" class="text-gray-700 font-semibold" target="_blank"> Vanshaj Tiwari</a>.
                 </div>
               </div>
@@ -129,17 +143,23 @@
       </div>
       <script>
             ////////////////////////////////////////////////////////////////////////////
-            let rooms=[];
-            const send__Struct=(message)=>`
-                                        <div class="bg-red-100 float-right clear-both px-2 py-1 m-3 rounded-lg">
+            const rooms=document.querySelectorAll(".rooms");
+            const set=new Set();
+            for(let i of rooms){ 
+              socket.emit("all-users",{roomID:i.getAttribute('id')});
+            }
+            const send__Struct=(message,user="<%=user.fullname%>")=>`
+                                      <div class="bg-red-100 float-right clear-both px-2 py-1 m-3 rounded-lg">
+                                          <h1 class="text-red-400 font-bold">${user}</h1>
                                           <div class="font-medium max-w-[500px]">${message}</div>
                                           <div class="font-sans flex justify-between">
                                             <span class="text-xs text-gray-500">${(new Date()).toLocaleString()}</span>
                                             <span class="text-xs">Read</span>
                                           </div>
                                         </div>`
-            const recieve__Struct=(message)=>`
+            const recieve__Struct=(message,user)=>`
                                         <div class="bg-red-100 float-left clear-both px-2 py-1 m-3 rounded-lg">
+                                          <h1 class="text-green-400 font-bold">${user}</h1>
                                           <div class="font-medium max-w-[500px]">${message}</div>
                                           <div class="font-sans flex justify-between">
                                             <span class="text-xs text-gray-500">${(new Date()).toLocaleString()}</span>
@@ -148,44 +168,42 @@
                                         </div>`
             const messageBox=document.querySelector('.messageBox');
             const sendMsgForm=document.querySelector(".--send-message-form");
-            console.log(sendMsgForm);
             sendMsgForm.addEventListener("submit",(e)=>{
                 e.preventDefault();
+               
                 const sendMessage=document.createElement('div');
-                sendMessage.innerHTML=send__Struct(e.target[1].value);
+                sendMessage.innerHTML=send__Struct(message=e.target[1].value);
                 messageBox.appendChild(sendMessage);
                 //////////////////////////////////////////////////////////////////////////////
                 
-                socket.emit('send-message',{message:e.target[1].value,senderId:socket.id});
+                socket.emit('send-message',{message:e.target[1].value,senderId:socket.id,user:"<%=user.fullname%>"});
                 //////////////////////////////////////////////////////////////////////////////
                 e.target.reset();
             });
             ////////////////////////////////////////////////////////////////////////////
 
-            socket.on('receive-message',({message})=>{
-              console.log(message);
+            socket.on('receive-message',({message,user})=>{
               const recieveMessage=document.createElement('div');
-              recieveMessage.innerHTML=recieve__Struct(message);
+              recieveMessage.innerHTML=recieve__Struct(message,user);
               messageBox.appendChild(recieveMessage);
             });
-
             ////////////////////////////////////////////////////////////////////////////
-            socket.on("show-rooms",({rooms})=>{
-                  const usersRooms=document.querySelector(".users--rooms");
-                  function customElement(rooms){
-                      return `
-                      <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
-                      <h3 class="font-bold">${rooms}</h3>
-                      <p class="text-gray-400">~ This is message</p>
-                      </div>
-                      `}
+            // socket.on("show-rooms",({rooms})=>{
+            //       const usersRooms=document.querySelector(".users--rooms");
+            //       function customElement(rooms){
+            //           return `
+            //           <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
+            //           <h3 class="font-bold">${rooms}</h3>
+            //           <p class="text-gray-400">~ This is message</p>
+            //           </div>
+            //           `}
                       
-                      for(let i=0;i<rooms.length;i++){
-                        const newRoom=document.createElement("div");
-                        newRoom.innerHTML=customElement(rooms[i]);
-                        usersRooms.appendChild(newRoom);
-                      }
-                  });
+            //           for(let i=0;i<rooms.length;i++){
+            //             const newRoom=document.createElement("div");
+            //             newRoom.innerHTML=customElement(rooms[i]);
+            //             usersRooms.appendChild(newRoom);
+            //           }
+            //       });
             ////////////////////////////////////////////////////////////////////////////
             
         </script>
