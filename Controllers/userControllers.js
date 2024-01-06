@@ -13,3 +13,8 @@ exports.updateUser=async(req,res)=>{
     res.status(200).json({status:"success",data});
 };
 
+
+exports.handleProfile=async(req,res)=>{
+    await Users.findByIdAndUpdate(req.session.user.id,{avatar:`/img/profiles/${req.session.user.id}.jpg`});
+    res.redirect("/dashboard/profile");
+}

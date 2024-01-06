@@ -69,10 +69,17 @@
                 <div class="bg-violet-500 p-6 rounded-lg text-white shadow">
                     
                     <div class="flex justify-around items-center">
-                        <div class="rounded-full overflow-hidden border border-black">
-                            <img src="/img/user--0.jpg" alt="User" width="420">
+                        <div class="rounded-full flex justify-center items-center min-w-[250px] min-h-[250px] bg-red-400 overflow-hidden hover:cursor-pointer" id="set--profile">
+                         <% if(user.avatar){ %>
+                            <img src="<%=user.avatar%>" alt="User" width="420"/>
+                          <%}else{%>
+                            <div class="bg-gray-700 w-full text-center py-5">No Profile</div>
+                          <%}%>
                         </div>
-                        <div class="grid grid-cols-2 gap-4 text-[25px] ml-4">
+                        <form action="/users/uploadprofile" method="post" enctype="multipart/form-data" class="form--profile">
+                          <input type="file" id="files" name="files" hidden>
+                        </form>
+                        <div class="grid grid-cols-2 gap-4 text-[25px]">
                             <div><strong>Name :</strong> <%=user.fullname%></div>
                             <div><strong>Email :</strong> <%=user.email%></div>
                             <div><strong>Username :</strong> <%=user.InstitutionDetails[0].username%></div>
@@ -87,7 +94,7 @@
                         </div>
                     </div>
                     <div class="mt-8 text-[15px] flex relative">
-                        <a href="" class="text-white font-semibold decoration-none mr-6 transition-all duration-300 hover:text-[20px] relative bg-red-400 hover:bg-red-600 p-2 rounded-lg"    >Update User Details</a>
+                        <a href="/dashboard/profile/filldetails" class="text-white font-semibold decoration-none mr-6 transition-all duration-300 hover:text-[20px] relative bg-red-400 hover:bg-red-600 p-2 rounded-lg"    >Update User Details</a>
                         <a href="" class="text-white font-semibold decoration-none mr-6 transition-all duration-300 hover:text-[20px] relative bg-red-400 hover:bg-red-600 p-2 rounded-lg"    >Update password</a>
                     </div>
                 </div>
@@ -106,4 +113,18 @@
     </div>
 
 </body>
+<script>
+  const profile=document.querySelector('#set--profile');
+    const files=document.querySelector("#files");
+    const uploadform=document.querySelector(".form--profile");
+    profile.addEventListener('click',(e)=>{
+        files.click();
+    });
+    files.addEventListener('change',(e)=>{
+      const agree=confirm("Want to Upload New Image");
+      if(agree){
+        uploadform.submit();
+      }
+    })
+</script>
 </html>

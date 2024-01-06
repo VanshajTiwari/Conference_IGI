@@ -2,7 +2,7 @@ const Express=require('express');
 const { isLoggedin } = require('../Controllers/authController');
 const Route=Express.Router();
 const meetingModel=require("./../Models/meeting");
-
+const UsersModel=require("./../Models/users");
 Route.get("/",(req,res)=>{ 
             res.status(200).render('index.ejs',{title:"Home"});
 });
@@ -23,9 +23,27 @@ Route.get("/dashboard/meeting",async (req,res)=>{
     const meetings=await meetingModel.find({createdBy:user});
     res.status(200).render("meeting.ejs",{title:"Meeting",user,meetings});
 })
-Route.get("/dashboard/chats",(req,res)=>{
+Route.get("/dashboard/chats",async (req,res)=>{
     const user=req.session.user;
-    res.status(200).render("chat.ejs",{title:"Chatting",user});
+    const users=await UsersModel.find({});
+    res.status(200).render("chat.ejs",{title:"Chatting",user,users,sender:undefined});
+});
+Route.get("/dashboard/chats/:id",async (req,res)=>{
+    const {id}=req.params;
+     const user=req.session.user;
+     const users=await UsersModel.find({});
+     const sender=()=>{
+        for(let i of users){
+            if(i.id==id)
+                return i;
+        }
+        return undefined;
+    }
+    if(!sender()){
+       return res.redirect("/dashboard/chats");
+    }
+    
+    res.status(200).render("chat.ejs",{title:"Chatting",user,users,sender:sender()});
 })
 Route.get("/dashboard/allmeeting",(req,res)=>{
     const user=req.session.user;
@@ -34,6 +52,7 @@ Route.get("/dashboard/allmeeting",(req,res)=>{
 //Route.use(isLoggedin);
 Route.get("/dashboard/profile",(req,res)=>{
     const user=req.session.user;
+
     res.status(200).render("profile.ejs",{title:"Profile",user});
 });
 Route.get("/dashboard/profile/filldetails",(req,res)=>{
