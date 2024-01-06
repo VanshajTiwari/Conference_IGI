@@ -36,20 +36,19 @@ App.use("/meeting",meetingRoute);
 App.all("*",(req,res)=>{
     res.status(404).render("404page.ejs");
 });
-let rooms=[];
+let rooms=new Set();
 io.on("connection",(socket)=>{
-    console.log("connected Users");
-    const roomsSocket=socket.rooms;
-    roomsSocket.forEach(ele=>{rooms.push(ele)});
-    socket.emit('show-rooms',{rooms});
-    socket.on("send-rooms",({id})=>{
-                    socket.join(id)
-                    
+    socket.on('user-data',(user)=>{
+            console.log(user);
     });
-    console.log(rooms);
+    socket.on('all-users',({roomID})=>{
+        rooms.add(roomID);
+      
+    });
+    console.log("connected Users");
     socket.on("disconnect",()=>{console.log("disconnected")});
-    socket.on('send-message',({message,senderId})=>{
-        socket.except(senderId).emit('receive-message',{message});
+    socket.on('send-message',({message,senderId,user})=>{
+        socket.except(senderId).emit('receive-message',{message,user});
     });
 });
 
