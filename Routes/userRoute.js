@@ -1,6 +1,7 @@
 const Express=require('express');
 const router=Express.Router();
-const {getAllUsers}=require('./../Controllers/userControllers');
+const uploadImg=require("./../utils/uploadImage");
+const {getAllUsers, handleProfile}=require('./../Controllers/userControllers');
 const {login,signup,protect,fillD,logout,forgetPassword, isLoggedin}=require("./../Controllers/authController");
 router.get("/getAllusers",getAllUsers)
       .get("/logout",logout)
@@ -9,4 +10,5 @@ router.get("/getAllusers",getAllUsers)
       .post("/forget",forgetPassword);
 router.use(isLoggedin);
 router.post("/fillDetails",fillD);
+router.post('/uploadprofile',uploadImg.single('files'),handleProfile);;
 module.exports=router;
