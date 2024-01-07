@@ -50,9 +50,8 @@ Route.get("/dashboard/allmeeting",(req,res)=>{
     res.status(200).render("AllMeeting.ejs",{title:"Schedules",user});
 })
 //Route.use(isLoggedin);
-Route.get("/dashboard/profile",(req,res)=>{
+Route.get("/dashboard/profile",async (req,res)=>{
     const user=req.session.user;
-
     res.status(200).render("profile.ejs",{title:"Profile",user});
 });
 Route.get("/dashboard/profile/filldetails",(req,res)=>{
