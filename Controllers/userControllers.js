@@ -16,5 +16,6 @@ exports.updateUser=async(req,res)=>{
 
 exports.handleProfile=async(req,res)=>{
     await Users.findByIdAndUpdate(req.session.user.id,{avatar:`/img/profiles/${req.session.user.id}.jpg`});
+    req.session.user.avatar=`/img/profiles/${req.session.user.id}.jpg`;
     res.redirect("/dashboard/profile");
 }

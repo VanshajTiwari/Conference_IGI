@@ -58,7 +58,8 @@ exports.fillD=async(req,res)=>{
         }
         const inst=new institutionModel({employID,user,institution,institutionAddress,userAddress,username,role,mobile,TimeZone})
         await inst.save();
-        res.status(200).send("Done");
+        req.session.destroy();
+        res.redirect('/login');
     }
     catch(err){
 
