@@ -8,10 +8,11 @@ router.get("/getAllusers",getAllUsers)
       .post("/signup",signup)
       .post("/login",login)
       .post("/forget",forgetPassword)
-      .get("/forget/:token",(req,res)=>res.render("forgotPassword.ejs"))
+      .get("/forgetpassword",(req,res)=>res.render("forgotPassword.ejs",{title:"forgotPassword"}))
+      .get("/forget/:token",(req,res)=>res.render("forgetPassword.ejs",{title:"forgetPassword",token:req.params.token}))
       .post("/forget/:token",resetForgotPassword);
-      router.post("/updatePassword/:id",updatePassword);
       router.use(isLoggedin);
+      router.post("/updatePassword/:id",updatePassword);
       router.post("/fillDetails",fillD);
       router.post('/uploadprofile',uploadImg.single('files'),handleProfile);;
 module.exports=router;
