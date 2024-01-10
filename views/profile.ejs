@@ -68,7 +68,7 @@
       <div class="mt-12">
                 <div class="bg-violet-500 p-6 rounded-lg text-white shadow">
                     
-                    <div class="flex justify-around items-center">
+                    <div class="flex justify-between items-center">
                         <div class="rounded-full flex justify-center items-center min-w-[250px] min-h-[250px] bg-red-400 overflow-hidden hover:cursor-pointer" id="set--profile">
                          <% if(user.avatar){ %>
                             <img src="<%=user.avatar%>" alt="User" width="420"/>
@@ -79,23 +79,21 @@
                         <form action="/users/uploadprofile" method="post" enctype="multipart/form-data" class="form--profile">
                           <input type="file" id="files" name="files" hidden>
                         </form>
-                        <div class="grid grid-cols-2 gap-4 text-[25px]">
+                        <div class="grid  grid-cols-2 text-[20px] space-y-5 ml-12">
                             <div><strong>Name :</strong> <%=user.fullname%></div>
                             <div><strong>Email :</strong> <%=user.email%></div>
-                            <div><strong>Username :</strong> <%=user.InstitutionDetails[0].username%></div>
                             <div><strong>field :</strong> <%=user.InstitutionDetails[0].role%></div>
-                            <div class="flex flex-col gap-4 mt-4">
-                                <div><strong>Institution : </strong><%=user.InstitutionDetails[0].institution%></div>
-                                <div><strong>Designation : </strong><%=user.InstitutionDetails[0].role%></div>
-                                <div><strong>Language : </strong>English</div>
-                                <div><strong>Time Zone : </strong>(GMT+5:30)India</div>
-                                <div><strong>DOB : </strong>19/12/2002</div>
-                            </div>
-                        </div>
+                            <div><strong>Contact No. :</strong> <%=user.InstitutionDetails[0].mobile%></div>
+                            <div><strong>Institution : </strong><%=user.InstitutionDetails[0].institution%></div>
+                            <div><strong>Designation : </strong><%=user.InstitutionDetails[0].role%></div>
+                            <div><strong>Language : </strong>English</div>
+                            <div><strong>Time Zone : </strong>(GMT+5:30)India</div>
+                            <div class="whitespace-nowrap"><strong>Employ ID : </strong><%=user.InstitutionDetails[0].employID%></div>
+                          </div>
                     </div>
                     <div class="mt-8 text-[15px] flex relative">
                         <a href="/dashboard/profile/filldetails" class="text-white font-semibold decoration-none mr-6 transition-all duration-300 hover:text-[20px] relative bg-red-400 hover:bg-red-600 p-2 rounded-lg"    >Update User Details</a>
-                        <a href="" class="text-white font-semibold decoration-none mr-6 transition-all duration-300 hover:text-[20px] relative bg-red-400 hover:bg-red-600 p-2 rounded-lg"    >Update password</a>
+                        <a href="/dashboard/profile/update-password" class="text-white font-semibold decoration-none mr-6 transition-all duration-300 hover:text-[20px] relative bg-red-400 hover:bg-red-600 p-2 rounded-lg"    >Update password</a>
                     </div>
                 </div>
         

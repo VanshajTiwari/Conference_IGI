@@ -4,12 +4,12 @@ const Mongoose=require('mongoose');
 const meetingSchema=new Mongoose.Schema({
     createdBy:{
         type:Mongoose.Schema.Types.ObjectId,
-        ref:"users",
+        ref:"Users",
         required:[true,"created must Assigned"]
     },
     host:[{
         type:Mongoose.Schema.Types.ObjectId,
-        ref:"users"
+        ref:"Users"
     }],
     meetingID:{
         type:String,
