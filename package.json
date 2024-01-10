@@ -4,7 +4,9 @@
   "description": "Application for Chatting with Friends",
   "main": "server.js",
   "scripts": {
-    "test": "nodemon server.js"
+    "test": "nodemon server.js",
+    "start":"nodemon server.js",
+    "build":"npm i"
   },
   "repository": {
     "type": "git",

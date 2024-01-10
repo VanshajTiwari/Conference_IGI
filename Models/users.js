@@ -24,7 +24,6 @@ const userSchema=new Mongoose.Schema({
         required:[true,"Confirm Password Field is Empty"],
         validate:{
             validator:function(el){
-                console.log("oasssword :",el);
                 return el===this.password
             },
             message:"Password mismatched"
@@ -55,9 +54,18 @@ const userSchema=new Mongoose.Schema({
         default:"participant"  ,
         select:false
     },
-    passwordChangedAt:Date,
-    passswordResetToken:String,
-    passwordResetExpires:Date,
+    passwordChangedAt:{
+        type:Date,
+        select:false
+    },
+    passswordResetToken:{
+        type:String,
+        select:false
+    },
+    passwordResetExpires:{
+        type:Date,
+        Select:false
+    },
 },{
     toJSON:{virtuals:true},
     toObject:{virtuals:true},
@@ -76,37 +84,37 @@ userSchema.virtual("ownMeetings",{
 
 userSchema.methods.correctPassword = async (candidatePassword,password) =>{
     try {
-      return await bcrypt.compare(candidatePassword, password);
+      return await bcrypt.compare(candidatePassword,password);
     } catch (error) {
       throw new Error(error);
     }
   };
- userSchema.statics.resetPassword=function(){
+ userSchema.methods.resetPassword=function(){
     const reset=crypto.randomBytes(32).toString('hex');
+    this.passwordChangedAt=Date.now();
     this.passswordResetToken=crypto.createHash('sha256').update(reset).digest('hex');
-    this.passwordResetExpires=Date.now()+10*60*1000
+    this.passwordResetExpires=Date.now()+10*60*1000;
     return reset;
  };
-userSchema.methods.createResetToken=function(){
-    const resetToken=crypto.randomBytes(12).toString('hex');
-    this.resetToken=crypto.createHash('sha256').update(resetToken).digest('hex');
-    this.resetTokenCreatedAt=Date.now();
-    return resetToken;
+// userSchema.methods.createResetToken=function(){
+//     const resetToken=crypto.randomBytes(12).toString('hex');
+//     this.resetToken=crypto.createHash('sha256').update(resetToken).digest('hex');
+//     this.resetTokenCreatedAt=Date.now();
+//     return resetToken;
 
-}
+// }
 userSchema.pre('save',async function(next){
-        // if(this.isModified()){
-            
-        //    return next();
-        // }
+        if(this.isModified()){
+           return next();
+        }
      
         this.confirmpassword="",
         this.password=await bcrypt.hash(this.password,12);
         next();
 });
-userSchema.method('isModified',function(){
-        return Boolean(this.resetToken);
-},{suppressWarning:true});
+userSchema.methods.isModified=(function(){
+        return Boolean(this.passswordResetToken);
+});
 const Users=Mongoose.model("Users",userSchema);
 
     

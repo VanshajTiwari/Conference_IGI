@@ -14,7 +14,9 @@ function generateToken(id){
 exports.login=async(req,res)=>{
     try{
         const {email,password}=req.body;
-        let user=await Users.findOne({email}).select("+password").populate('InstitutionDetails').populate('ownMeetings');
+       let user=await Users.findOne({email}).select("+password").populate('InstitutionDetails').populate('ownMeetings');
+        
+
          if(!user ||!await user.correctPassword(password,user.password))
          {
              res.status(200).json({status:"Fail",message:"Email or Password is Wrong"});
@@ -29,7 +31,7 @@ exports.login=async(req,res)=>{
     return res.redirect("/dashboard");
     }
     catch(err){
-        console.log("in login");
+        console.log(err);
         return res.status(200).json({status:"failed",Error:err.message})
     }
 };
@@ -48,7 +50,6 @@ exports.fillD=async(req,res)=>{
         const user=req.session.user;
         const employID=slug(institution)+"-"+req.session.user.id;
         const {InstitutionDetails}=await Users.findById(req.session.user.id).populate("InstitutionDetails");
-        console.log(InstitutionDetails[0]);
         if(InstitutionDetails[0]){
             const instiDetails=await institutionModel.findOne({user});
             console.log({instiDetails});
@@ -59,7 +60,7 @@ exports.fillD=async(req,res)=>{
         const inst=new institutionModel({employID,user,institution,institutionAddress,userAddress,username,role,mobile,TimeZone})
         await inst.save();
         req.session.destroy();
-        res.redirect('/login');
+        res.redirect('/login'); 
     }
     catch(err){
 
@@ -115,14 +116,41 @@ exports.forgetPassword=async(req,res)=>{
             res.status(200).json({"status":"fail",message:"Email not Exist"});
         
     //2)Genearte the random reset token
-        const resetToken=await Users.resetPassword();
-        
+    const token=await user.resetPassword();
+    user.save({validateBeforeSave:false}); 
         //3)send it to user's email
 
         sendEmail({
             email:user.email,
             subject:"Password reset Token",
-            message :"this is your password reset Token : " +resetToken
+            message :`THIS is message is for reset Link reset Token:${req.protocol}//:${req.get('host')}${req.originalUrl}/${token}`
         });
-        res.status(200).json({status:"success",resetTOken:resetToken});
+        res.status(200).json({status:"success",resetToken:token});
+}
+exports.resetForgotPassword=async(req,res)=>{
+        const {password,confirmpassword}=req.body;
+        const {token}=req.params;
+        const passswordResetToken=crypt.createHash('sha256').update(token).digest('hex');
+        const users=await Users.findOne({passswordResetToken});
+        users.password=password;
+        users.confirmpassword=confirmpassword;
+        users.save();
+        res.send("Done!");
+}
+exports.updatePassword=async(req,res)=>{
+try{    const {id}=req.params;
+    const {currpassword,password,confirmpassword}=req.body;
+    const users=await Users.findById(id).select("+password");
+    console.log(users);
+    if(!users.correctPassword(currpassword,users.password)){
+        res.send("password Incorrect");
+    }
+
+    users.password=password;
+    users.confirmpassword=confirmpassword;
+    users.save();
+    res.redirect("/dashboard/profile");}
+catch(err){
+    res.status(400).json({status:"fail",Error:err.message});
+}
 }
