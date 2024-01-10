@@ -4,6 +4,7 @@ const crypt=require('crypto');
 const sendEmail=require('./../utils/sendEmail');
 const institutionModel = require('./../Models/institutionModel');
 const slug =require('slug');
+const { ContractMissingDeployDataError } = require('web3');
 function generateToken(id){
       let option={
         expiresIn:'1h'
@@ -110,7 +111,7 @@ exports.restrictTo=(...roles)=>{
         }
 }
 exports.forgetPassword=async(req,res)=>{
-    //1)GET User based on posted email
+    //1)GET User based on posted email 
         const user=await Users.findOne({email:req.body.email});
         if(!user)
             res.status(200).json({"status":"fail",message:"Email not Exist"});
@@ -125,13 +126,14 @@ exports.forgetPassword=async(req,res)=>{
             subject:"Password reset Token",
             message :`THIS is message is for reset Link reset Token:${req.protocol}//:${req.get('host')}${req.originalUrl}/${token}`
         });
-        res.status(200).json({status:"success",resetToken:token});
+        res.status(200).json({status:"success",message:"Reset EndPoint Sended to Mail trap"});
 }
 exports.resetForgotPassword=async(req,res)=>{
         const {password,confirmpassword}=req.body;
         const {token}=req.params;
         const passswordResetToken=crypt.createHash('sha256').update(token).digest('hex');
         const users=await Users.findOne({passswordResetToken});
+        console.log(users);
         users.password=password;
         users.confirmpassword=confirmpassword;
         users.save();
@@ -140,7 +142,7 @@ exports.resetForgotPassword=async(req,res)=>{
 exports.updatePassword=async(req,res)=>{
 try{    const {id}=req.params;
     const {currpassword,password,confirmpassword}=req.body;
-    const users=await Users.findById(id).select("+password");
+    const users=await Users.findById(id).select("+password"); 
     console.log(users);
     if(!users.correctPassword(currpassword,users.password)){
         res.send("password Incorrect");
