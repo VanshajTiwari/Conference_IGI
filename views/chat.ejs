@@ -74,12 +74,14 @@
           <div class="flex justify-between">
             <div class="users mx-1 w-[25%] h-[510px] overflow-x-hidden overflow-auto users--rooms">
               <% for(let i of users){ %>
+                <%if(i.id!=user.id){%>
                 <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>" class="rooms">
                     <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                         <h3 class="font-bold"><%=i.fullname%></h3>
                         <p class="text-gray-400">~ This is message</p>
                     </div>           
-                </a>                                 
+                </a>  
+                <%}%>                               
                 <%}%>
             </div>
             <div class="__inbox w-[85%] mt-2">

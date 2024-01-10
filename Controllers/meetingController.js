@@ -8,7 +8,7 @@ exports.createMeeting=async(req,res)=>{
         const startAt=new Date(req.body.date+" "+req.body.time).toISOString();
         // key
         const agenda=req.body.meeting_type;
-        const meetingLink=`http://127.0.0.1:7575/meeting/projectIGI/${meetingID}/p/${password}`
+        const meetingLink=`/meeting/projectIGI/${meetingID}/p/${password}`
         const meetingObj=new meetingModel({createdBy:host,host:[host],meetingID,password,startAt,agenda,meetingLink});   
         meetingObj.save();     
         res.redirect('/dashboard/meeting');

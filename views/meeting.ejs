@@ -102,9 +102,12 @@
                     <div>
                       <h1 class="font-bold">Meeting You Schedule</h1>
                       <div class="w-full border-2 bg-gray-900"></div>
-                      <div class="my_meeting_cards h-[280px] flex mt-2 gap-x-4">
-                        <%for(let i of meetings){%>
-                        <div class="clear-both w-auto rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+                      <div class="my_meeting_cards flex flex-row space-x-5 overflow-x-auto">
+                        <%if(!user.ownMeetings.length){%>
+                          <div class="w-full text-center p-6 text-[20px]"> - - No Meetings - - </div>
+                          <%}%>
+                        <%for(let i of user.ownMeetings){%>
+                        <div class="min-w-[500px] rounded-xl bg-white bg-clip-border text-gray-700 shadow-md my-4">
                           
                           <div class="p-6 pb-0">
                             <i class="fa-solid fa-business-time mb-4 text-5xl h-12 w-12 text-red-500"></i>
@@ -113,9 +116,10 @@
                             </h5>
                             
                               <div class="font-normal leading-relaxed antialiased">
-                                  <span>Time: <%=i.startAt%></span><br/>
+                                  <span>createdBy : </span>
+                                  <span class="whitespace-nowrap">Time: <%=i.startAt%></span><br/>
                                   <span>Type: <%=i.agenda%></span><br/>
-                                  <span>UserID: <%=i.meetingID%></span><br/>
+                                  <span class="whitespace-nowrap">UserID: <%=i.meetingID%></span><br/>
                                   <span>password:<%=i.password%></span>
                               </div>
                            
@@ -125,7 +129,7 @@
                           <div class="p-6 pt-0">
                             <a
                               class="!font-medium !text-red-900 !transition-colors hover:!text-red-500"
-                              href="#"
+                              href="<%=i.meetingLink%>"
                             >
                               <button
                                 class="flex select-none items-center gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
@@ -168,53 +172,62 @@
                     <div class="w-full border-2 bg-gray-900"></div>
                     <div class="meeting--cards">
                         <div class="overflow-x-auto flex gap-x-6 pb-3">
+                          <%if(!meetings.length){%>
+                            <div class="w-full text-center p-6 text-[20px]"> - - No Meetings - - </div>
+                          <%}%>
                           <!-- component -->
-<div class="mt-6 flex w-64 float-left clear-both rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-  <div class="p-6 pb-0">
-    <i class="fa-solid fa-business-time mb-4 text-5xl h-12 w-12 text-red-500"></i>
-    <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-      Agenda
-    </h5>
+                          <%for(let i of meetings){%>
+                            <div class="min-w-[500px] rounded-xl bg-white bg-clip-border text-gray-700 shadow-md my-4">
+                              
+                              <div class="p-6 pb-0">
+                                <i class="fa-solid fa-business-time mb-4 text-5xl h-12 w-12 text-red-500"></i>
+                                <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
+                                  <%=(i.agenda.charAt(0)).toUpperCase()+(i.agenda).slice(1)%>
+                                </h5>
+                                
+                                  <div class="font-normal leading-relaxed antialiased">
+                                    <span>CreatedBy : <%=i.createdBy.fullname%></span>
+                                      <span class="whitespace-nowrap">Time: <%=i.startAt%></span><br/>
+                                      <span>Type: <%=i.agenda%></span><br/>
+                                      <span class="whitespace-nowrap">UserID: <%=i.meetingID%></span><br/>
+                                      <span>password:<%=i.password%></span>
+                                  </div>
+                               
+                              
+                              </div>
+                             
+                              <div class="p-6 pt-0">
+                                <a
+                                  class="!font-medium !text-red-900 !transition-colors hover:!text-red-500"
+                                  href="<%=i.meetingLink%>"
+                                >
+                                  <button
+                                    class="flex select-none items-center gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                    type="button"
+                                    data-ripple-dark="true"
+                                  >
+                                    Join
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke-width="2"
+                                      stroke="currentColor"
+                                      aria-hidden="true"
+                                      class="h-4 w-4"
+                                    >
+                                      <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                                      ></path>
+                                    </svg>
+                                  </button>
+                                </a>
+                              </div>
+                            </div>
+                            <% } %>
     
-      <pre class="font-normal flex-col leading-relaxed antialiased">
-  <span>Time: 12:00 Am</span>
-  <span>Type: Urgent!</span>
-  <span>UserID: @Vanshaj</span>
-  <span>password: 12345</span>
-      </pre>
-   
-  
-  </div>
-  <div class="p-6 pt-0">
-    <a
-      class="!font-medium !text-red-900 !transition-colors hover:!text-red-500"
-      href="#"
-    >
-      <button
-        class="flex select-none items-center gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-red-500 transition-all hover:bg-red-500/10 active:bg-red-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-        type="button"
-        data-ripple-dark="true"
-      >
-        Join
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-          aria-hidden="true"
-          class="h-4 w-4"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-          ></path>
-        </svg>
-      </button>
-    </a>
-  </div>
-</div>
 
 
     </div>
@@ -238,4 +251,7 @@
 
 </div>    
 </body>
+<script>
+  console.log(Boolean("<%=meetings.length%>"))
+</script>
 </html>
