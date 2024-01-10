@@ -4,7 +4,6 @@ const crypt=require('crypto');
 const sendEmail=require('./../utils/sendEmail');
 const institutionModel = require('./../Models/institutionModel');
 const slug =require('slug');
-const { ContractMissingDeployDataError } = require('web3');
 function generateToken(id){
       let option={
         expiresIn:'1h'
