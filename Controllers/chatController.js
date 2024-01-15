@@ -1,15 +1,32 @@
 const conversation=require('./../Models/Conversation');
 const Users = require('./../Models/users');
 exports.sendMessage=async(req,res)=>{
-    receiver=req.params.id;
+    const receiver=req.params.id;
+    const msg=req.body.msg;
     try{
-        const data=await Users.find({_id:receiver})
-        const [sender,chat]=[req.body.sender,req.body.chat];
-        await conversation.create({sender,receiver,chat}).catch(er=>er);;
-        res.status(200).send("message Sent");
+        const findConversation=await conversation.findOne({chatters:{$all:[receiver,req.session.user.id]}});
+        if(!findConversation){
+            const newConversation=new conversation({
+                chatters:[req.session.user.id,receiver],
+                messageDetails:{
+                    senderId:req.session.user,
+                    message:msg
+                      }
+            });
+            newConversation.save();
+            res.status(200).send("message Sent");
+        }
+        else{
+            (findConversation.messageDetails).push({
+                senderId:req.session.user,
+                message:msg
+            });
+            findConversation.save();
+            res.status(200).send("Guru bole toh kuch samj nhi aa raha");
+        }
     }
     catch(err){
-        res.status(500).json({ "status": "failed", Error: err });
+        res.status(500).json({ "status": "failed", Error: err.message });
     }
 }
 exports.viewsMessage=async (req,res)=>{
