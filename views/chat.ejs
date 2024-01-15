@@ -75,7 +75,7 @@
             <div class="users mx-1 w-[25%] h-[510px] overflow-x-hidden overflow-auto users--rooms">
               <% for(let i of users){ %>
                 <%if(i.id!=user.id){%>
-                <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>" class="rooms">
+                <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
                     <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                         <h3 class="font-bold"><%=i.fullname%></h3>
                         <p class="text-gray-400">~ This is message</p>
@@ -99,7 +99,7 @@
                             </div>
                           </div>
                           <div>
-                              <div>
+                              <div  id="<%=sender.id%>" data-user-name="<%=sender.fullname%>" class="rooms">
                                   <h1 class="font-medium"><%=sender.fullname%></h1>
                                   <span class="font-sans text-xs ml-2 status--user">Status</span>
                               </div>
@@ -183,7 +183,6 @@
                 e.target.reset();
             });
             ////////////////////////////////////////////////////////////////////////////
-
             socket.on('receive-message',({message,user})=>{
               const recieveMessage=document.createElement('div');
               recieveMessage.innerHTML=recieve__Struct(message,user);
@@ -207,7 +206,12 @@
             //           }
             //       });
             ////////////////////////////////////////////////////////////////////////////
-            
+            const rooms_=document.querySelector(".rooms");
+            if(rooms_){
+                const data=rooms_;
+                 let {userName}= data.dataset;
+                 socket.emit('join-room',{roomId:data.id,userName});
+              };
         </script>
       </body>
 
