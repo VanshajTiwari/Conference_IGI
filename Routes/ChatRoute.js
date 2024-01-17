@@ -4,10 +4,11 @@ const Route=Express.Router();
 
 
 Route.get("/:id/test",(req,res)=>res.status(200).send("working"))
-.post('/:id',chatMethods.sendMessage)
-.delete("/:id",chatMethods.deleteAll)
-.get("/:id",chatMethods.viewsMessage);
-
+.get("/showmsg",chatMethods.getSuperChats)
+.post("/sendmsg",chatMethods.superChattingControllers)
+// .post('/:id',chatMethods.sendMessage)
+// .delete("/:id",chatMethods.deleteAll)
+.get("/:id",chatMethods.viewsMessage)
 
 
 module.exports=Route;
