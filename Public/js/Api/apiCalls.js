@@ -1,4 +1,4 @@
-const BASE_URL="http://127.0.0.1:7575"
+const BASE_URL="https://project-igi-chatting-application.onrender.com"
 const getMessage=async()=>{
     const res=await axios({
         method:"GET",
