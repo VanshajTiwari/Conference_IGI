@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "nodemon server.js",
-    "start":"nodemon server.js",
-    "build":"npm i"
+    "start": "nodemon server.js",
+    "build": "npm i"
   },
   "repository": {
     "type": "git",
@@ -15,10 +15,12 @@
   "author": "Vanshaj Tiwari",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
