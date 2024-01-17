@@ -1,8 +1,9 @@
 <%- include("./commons/boiler") %>
 <body>
+  <script src="/js/Api/apiCalls.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-      const socket = io("http://127.0.0.1:7575");
+  <script> 
+      const socket = io("https://project-igi-chatting-application.onrender.com");
   </script>
     <!-- component -->
     <%- include("./commons/header")%>
@@ -75,7 +76,7 @@
             <div class="users mx-1 w-[25%] h-[510px] overflow-x-hidden overflow-auto users--rooms">
               <% for(let i of users){ %>
                 <%if(i.id!=user.id){%>
-                <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>" class="rooms">
+                <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
                     <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                         <h3 class="font-bold"><%=i.fullname%></h3>
                         <p class="text-gray-400">~ This is message</p>
@@ -84,6 +85,7 @@
                 <%}%>                               
                 <%}%>
             </div>
+
             <div class="__inbox w-[85%] mt-2">
                 <div class="bg-gray-50 ">
                   <div class="p-1 flex items-center">
@@ -99,7 +101,7 @@
                             </div>
                           </div>
                           <div>
-                              <div>
+                              <div  id="<%=sender.id%>" data-user-name="<%=sender.fullname%>" class="rooms">
                                   <h1 class="font-medium"><%=sender.fullname%></h1>
                                   <span class="font-sans text-xs ml-2 status--user">Status</span>
                               </div>
@@ -112,8 +114,9 @@
                   </div>
                   <div class="max-h-[390px] overflow-auto bg-blue-500 messageBox">
 
-                                <!-- messages    -->
-                                <!-- send Msg    -->
+
+                      <!-- messages    -->
+                               <!-- send Msg    -->
                                 <!-- message Msg -->
                                 
                   </div>
@@ -145,26 +148,27 @@
       </div>
       <script>
             ////////////////////////////////////////////////////////////////////////////
+
             const rooms=document.querySelectorAll(".rooms");
             const set=new Set();
             for(let i of rooms){ 
               socket.emit("all-users",{roomID:i.getAttribute('id')});
             }
-            const send__Struct=(message,user="<%=user.fullname%>")=>`
+            const send__Struct=(message,user="<%=user.fullname%>",time=(new Date()).toLocaleString())=>`
                                       <div class="bg-red-100 float-right clear-both px-2 py-1 m-3 rounded-lg">
                                           <h1 class="text-red-400 font-bold">${user}</h1>
                                           <div class="font-medium max-w-[500px]">${message}</div>
                                           <div class="font-sans flex justify-between">
-                                            <span class="text-xs text-gray-500">${(new Date()).toLocaleString()}</span>
+                                            <span class="text-xs text-gray-500">${time}</span>
                                             <span class="text-xs">Read</span>
                                           </div>
                                         </div>`
-            const recieve__Struct=(message,user)=>`
+            const recieve__Struct=(message,user,time=(new Date()).toLocaleString())=>`
                                         <div class="bg-red-100 float-left clear-both px-2 py-1 m-3 rounded-lg">
                                           <h1 class="text-green-400 font-bold">${user}</h1>
                                           <div class="font-medium max-w-[500px]">${message}</div>
                                           <div class="font-sans flex justify-between">
-                                            <span class="text-xs text-gray-500">${(new Date()).toLocaleString()}</span>
+                                            <span class="text-xs text-gray-500">${time}</span>
                                             <span class="text-xs">Read</span>
                                           </div>
                                         </div>`
@@ -172,7 +176,9 @@
             const sendMsgForm=document.querySelector(".--send-message-form");
             sendMsgForm.addEventListener("submit",(e)=>{
                 e.preventDefault();
-               
+                if(!e.target[1].value)
+                  return;
+                sendMsg("<%=user.id%>",e.target[1].value);
                 const sendMessage=document.createElement('div');
                 sendMessage.innerHTML=send__Struct(message=e.target[1].value);
                 messageBox.appendChild(sendMessage);
@@ -183,7 +189,6 @@
                 e.target.reset();
             });
             ////////////////////////////////////////////////////////////////////////////
-
             socket.on('receive-message',({message,user})=>{
               const recieveMessage=document.createElement('div');
               recieveMessage.innerHTML=recieve__Struct(message,user);
@@ -207,7 +212,25 @@
             //           }
             //       });
             ////////////////////////////////////////////////////////////////////////////
-            
+            const rooms_=document.querySelector(".rooms");
+            if(rooms_){
+                const data=rooms_;
+                 let {userName}= data.dataset;
+                 socket.emit('join-room',{roomId:data.id,userName});
+              };
+              (async function(){
+                getMessage().then(E=>{
+                  for(let e of E){
+                    const sendMessage=document.createElement('div');                  
+                    if(e.senderId.id=="<%=user.id%>"){
+                      sendMessage.innerHTML=send__Struct(e.message,e.senderId.fullname,e.createdAt);
+                      messageBox.appendChild(sendMessage);
+                  }else{ 
+                    sendMessage.innerHTML=recieve__Struct(e.message,e.senderId.fullname,e.createdAt);
+                    messageBox.appendChild(sendMessage);
+                  }}
+                })
+            })();
         </script>
       </body>
 
