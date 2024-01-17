@@ -36,9 +36,49 @@ exports.viewsMessage=async (req,res)=>{
     res.status(200).json({
         status:"success",
         data:chats
-    });
+    }); 
 }
 exports.deleteAll=async(req,res)=>{ 
     await conversation.deleteMany({});
     res.status(204).send();
+}
+exports.superChattingControllers=async(req,res)=>{
+
+    //1) refrence of user
+try{    
+    console.log(req.body.sender);
+    const {sender,message}=req.body;
+    const senderId=await Users.findById(sender);
+    const Obj={senderId,message};
+    let newChat=await conversation.findOne({chatters:{$all:['super','chats']}});
+    
+    if(!newChat){
+        newChat=new conversation({
+            chatters:['super',"chats"],
+            messageDetails:[Obj]
+        });
+        newChat.save({validateBeforSave:false});
+        return res.status(200).send("send");
+    }
+    (newChat.messageDetails).push(Obj);
+    newChat.save();
+    res.status(200).send("already modified");}
+    catch(err){
+        console.log(err);
+        res.status(200).json({status:"success",err:err});
+    }
+    // 2) get message of user
+    
+    //3) create Object
+
+    //4) save to mongo
+
+}; 
+exports.getSuperChats=async(req,res)=>{
+    let superChat=await conversation.findOne({chatters:{$all:['super','chats']}}).populate({path:"messageDetails",populate:{path:"senderId"}});
+    if(!superChat){
+        return;
+    }
+    res.status(200).json({status:"success",chats:superChat.messageDetails});
+
 }

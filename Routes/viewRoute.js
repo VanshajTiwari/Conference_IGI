@@ -42,8 +42,8 @@ Route.get("/dashboard/chats/:id",async (req,res)=>{
      const user=req.session.user;
      const users=await UsersModel.find({});
      const sender=()=>{
-        for(let i of users){
-            if(i.id==id)
+        for(let i of users){  
+            if(i.id==id) 
                 return i;
         }
         return undefined;

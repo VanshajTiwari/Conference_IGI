@@ -1,6 +1,7 @@
 const Express=require("express");
 const path=require("path");
 const App=Express();
+const cors=require("cors");
 const morgan=require('morgan');
 const cookieParser=require('cookie-parser');
 const userRouter=require("./Routes/userRoute");
@@ -10,6 +11,7 @@ const meetingRoute=require("./Routes/meeting");
 const {Server}=require('socket.io');
 const expressSession=require('express-session');
 //SET VIEW ENGINE
+App.use(cors());
 App.use(morgan("dev"));
 App.use(cookieParser());
 App.use(Express.json());
@@ -29,9 +31,9 @@ App.use(expressSession({
     resave:false,
     saveUninitialized:false
 }))
+App.use("/chats",chatRouter);
 App.use("/users",userRouter);
 App.use("/",viewRouter);
-App.use("/chats",chatRouter);
 App.use("/meeting",meetingRoute);
 App.all("*",(req,res)=>{
     res.status(404).render("404page.ejs");
@@ -56,7 +58,7 @@ io.on("connection",(socket)=>{
     console.log("connected Users");
     socket.on("disconnect",()=>{console.log("disconnected")});
     socket.on('send-message',({message,senderId,user})=>{
-    //     socket.except(senderId).emit('receive-message',{message,user});
+         socket.except(senderId).emit('receive-message',{message,user});
         io.except(senderId).to(roomObj.roomID).emit('receive-message',{message,user});
     });
 });
