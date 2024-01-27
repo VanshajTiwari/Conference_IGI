@@ -8,7 +8,7 @@
     "start": "nodemon server.js",
     "build": "npm i"
   },
-  "repository": {
+  "repository": { 
     "type": "git",
     "url": "https://github.com/VanshajTiwari/Chatting_App.git"
   },
