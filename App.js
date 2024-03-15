@@ -38,13 +38,16 @@ App.use("/meeting",meetingRoute);
 App.all("*",(req,res)=>{
     res.status(404).render("404page.ejs");
 });
+let users=0;
 let roomObj={};
 io.on("connection",(socket)=>{
-    socket.on("join-room",(data)=>{
-        console.log(data);
-        socket.join(data.roomID);
-        roomObj={roomID:data.roomID,userName:data.userName};
-        console.log(`${data.userName} bhai ka kamra`);
+    socket.on("join-room",async (data)=>{
+        roomObj=await data;
+        // console.log(roomObj);
+        socket.join(roomObj.roomId);
+      console.log(`${roomObj.userName} joined room ${JSON.stringify(roomObj)} ID`);
+        // console.log(roomObj);
+        users++;
         
       });
 
@@ -58,11 +61,13 @@ io.on("connection",(socket)=>{
     console.log("connected Users");
     socket.on("disconnect",()=>{console.log("disconnected")});
     socket.on('send-message',({message,senderId,user})=>{
-         socket.except(senderId).emit('receive-message',{message,user});
-        io.except(senderId).to(roomObj.roomID).emit('receive-message',{message,user});
+            const rooms = io.sockets.adapter.rooms;
+            console.log(rooms);
+         socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user});
+       // io.except(senderId).to(roomObj.roomID).emit('receive-message',{message,user});
     });
 });
-io.to(roomObj.roomID).emit('send-message-room',{message:"hello"});
+//io.to(roomObj.roomID).emit('send-message-room',{message:"hello"});
 // io.to(roomObj.roomID).emit('send-message',{message,user});    
  
 module.exports={App}; 

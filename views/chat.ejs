@@ -70,12 +70,18 @@
           </div>
         </div>
       </nav>
-      <div class="bg-red-500 p-4 w-full min-h-16 h-auto rounded-lg">
+      <div class="bg-red-500 p-4 w-full min-h-[500px] h-[770px] rounded-lg">
         <div>
           <div class="flex justify-between">
-            <div class="users mx-1 w-[25%] h-[510px] overflow-x-hidden overflow-auto users--rooms">
+            <div class="users mx-1 w-[25%] h-[700px] overflow-x-hidden overflow-auto users--rooms">
+              <a href="http://127.0.0.1:7575/dashboard/chats" id="super--chats">
+                <div class="my-2 bg-violet-800 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
+                    <h3 class="font-bold text-[25px] text-center text-white">Super Chats</h3>
+                    
+                </div>           
+            </a>  
               <% for(let i of users){ %>
-                <%if(i.id!=user.id){%>
+                <%if(i.id!=user.id || true){%>
                 <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
                     <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                         <h3 class="font-bold"><%=i.fullname%></h3>
@@ -149,11 +155,11 @@
       <script>
             ////////////////////////////////////////////////////////////////////////////
 
-            const rooms=document.querySelectorAll(".rooms");
-            const set=new Set();
-            for(let i of rooms){ 
-              socket.emit("all-users",{roomID:i.getAttribute('id')});
-            }
+            // const rooms=document.querySelector(".rooms");
+            // const set=new Set();
+            // // for(let i of rooms){ 
+            // //   socket.emit("all-users",{roomID:i.getAttribute('id')});
+            // // }
             const send__Struct=(message,user="<%=user.fullname%>",time=(new Date()).toLocaleString())=>`
                                       <div class="bg-red-100 float-right clear-both px-2 py-1 m-3 rounded-lg">
                                           <h1 class="text-red-400 font-bold">${user}</h1>
@@ -178,7 +184,7 @@
                 e.preventDefault();
                 if(!e.target[1].value)
                   return;
-                sendMsg("<%=user.id%>",e.target[1].value);
+               // sendMsg("<%=user.id%>",e.target[1].value);
                 const sendMessage=document.createElement('div');
                 sendMessage.innerHTML=send__Struct(message=e.target[1].value);
                 messageBox.appendChild(sendMessage);
@@ -217,7 +223,10 @@
                 const data=rooms_;
                  let {userName}= data.dataset;
                  socket.emit('join-room',{roomId:data.id,userName});
-              };
+              }
+            else{
+              socket.emit("join-room",{roomId:"superChat",userName:"All"});
+            }
               (async function(){
                 getMessage().then(E=>{
                   for(let e of E){
