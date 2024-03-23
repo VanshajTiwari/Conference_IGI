@@ -70,10 +70,10 @@
           </div>
         </div>
       </nav>
-      <div class="bg-red-500 p-4 w-full min-h-[500px] h-[770px] rounded-lg">
+      <div class="bg-red-500 p-4 w-full min-h-[500px] h-[700px] rounded-lg">
         <div>
           <div class="flex justify-between">
-            <div class="users mx-1 w-[25%] h-[700px] overflow-x-hidden overflow-auto users--rooms">
+            <div class="users mx-1 w-[25%] h-[680px] overflow-x-hidden overflow-auto users--rooms">
               <a href="http://127.0.0.1:7575/dashboard/chats" id="super--chats">
                 <div class="my-2 bg-violet-800 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                     <h3 class="font-bold text-[25px] text-center text-white">Super Chats</h3>
@@ -81,7 +81,7 @@
                 </div>           
             </a>  
               <% for(let i of users){ %>
-                <%if(i.id!=user.id || true){%>
+                <%if(i.id!=user.id){%>
                 <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
                     <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                         <h3 class="font-bold"><%=i.fullname%></h3>
@@ -118,7 +118,7 @@
                                 </div>
                                 <%}%>
                   </div>
-                  <div class="max-h-[390px] overflow-auto bg-blue-500 messageBox">
+                  <div class="h-[540px] overflow-auto bg-blue-500 messageBox">
 
 
                       <!-- messages    -->
@@ -179,6 +179,7 @@
                                           </div>
                                         </div>`
             const messageBox=document.querySelector('.messageBox');
+            messageBox.scrollTo=messageBox.scrollHeight;
             const sendMsgForm=document.querySelector(".--send-message-form");
             sendMsgForm.addEventListener("submit",(e)=>{
                 e.preventDefault();
@@ -186,11 +187,11 @@
                 if(!e.target[1].value)
                   return;
                 if("<%=sender.id%>"==""){
-                  console.log("undefined");
+                  
                   sendMsg("<%=user.id%>",e.target[1].value);
                 }
                 else{
-                  console.log("runned")
+                 
                   sendMsg("<%=user.id%>",e.target[1].value,`<%=sender._id%>`);
                 }
                 const sendMessage=document.createElement('div');
@@ -230,7 +231,7 @@
             if(rooms_){
                 const data=rooms_;
                  let {userName}= data.dataset;
-                 socket.emit('join-room',{roomId:data.id,userName});
+                 socket.emit('join-room',{roomId:[data.id,"<%=user.id%>"],userName});
               }
             else{
               socket.emit("join-room",{roomId:"superChat",userName:"All"});
