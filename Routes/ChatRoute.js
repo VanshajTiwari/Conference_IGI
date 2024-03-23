@@ -5,10 +5,10 @@ const Route=Express.Router();
 
 Route.get("/:id/test",(req,res)=>res.status(200).send("working"))
 .get("/showmsg",chatMethods.getSuperChats)
-.post("/sendmsg",chatMethods.superChattingControllers)
+.post("/sendmsg/:id?",chatMethods.superChattingControllers)
 // .post('/:id',chatMethods.sendMessage)
 // .delete("/:id",chatMethods.deleteAll)
-.get("/:id",chatMethods.viewsMessage)
+.get("/:id",chatMethods.getSuperChats)
 
 
 module.exports=Route;

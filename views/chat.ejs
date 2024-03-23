@@ -95,7 +95,7 @@
             <div class="__inbox w-[85%] mt-2">
                 <div class="bg-gray-50 ">
                   <div class="p-1 flex items-center">
-                    <%if(sender){%>
+                    <%if(sender.id!=""){%>
                           <div class="m-2">
                             <!-- <img src="" alt="">     div --> 
                             <div class="w-[50px] h-[50px] bg-blue-500 rounded-full overflow-hidden">
@@ -182,9 +182,17 @@
             const sendMsgForm=document.querySelector(".--send-message-form");
             sendMsgForm.addEventListener("submit",(e)=>{
                 e.preventDefault();
+              
                 if(!e.target[1].value)
                   return;
-               // sendMsg("<%=user.id%>",e.target[1].value);
+                if("<%=sender.id%>"==""){
+                  console.log("undefined");
+                  sendMsg("<%=user.id%>",e.target[1].value);
+                }
+                else{
+                  console.log("runned")
+                  sendMsg("<%=user.id%>",e.target[1].value,`<%=sender._id%>`);
+                }
                 const sendMessage=document.createElement('div');
                 sendMessage.innerHTML=send__Struct(message=e.target[1].value);
                 messageBox.appendChild(sendMessage);
@@ -228,7 +236,7 @@
               socket.emit("join-room",{roomId:"superChat",userName:"All"});
             }
               (async function(){
-                getMessage().then(E=>{
+                getMessage("<%=user.id%>","<%=sender.id%>").then(E=>{
                   for(let e of E){
                     const sendMessage=document.createElement('div');                  
                     if(e.senderId.id=="<%=user.id%>"){

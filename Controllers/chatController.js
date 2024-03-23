@@ -46,23 +46,47 @@ exports.superChattingControllers=async(req,res)=>{
 
     //1) refrence of user
 try{    
-    console.log(req.body.sender);
+   // console.log("Runned");
+    const receiverId=req.params.id;
+   // console.log(req.body.sender);
     const {sender,message}=req.body;
     const senderId=await Users.findById(sender);
     const Obj={senderId,message};
-    let newChat=await conversation.findOne({chatters:{$all:['super','chats']}});
-    
-    if(!newChat){
-        newChat=new conversation({
-            chatters:['super',"chats"],
+    console.log(receiverId);
+    if(!receiverId){
+            let newChat=await conversation.findOne({chatters:{$all:['super','chats']}});
+            
+            if(!newChat){
+                newChat=new conversation({
+                    chatters:['super',"chats"],
+                    messageDetails:[Obj]
+                });
+                newChat.save({validateBeforSave:false});
+                return;
+             //   return;
+
+            }
+            (newChat.messageDetails).push(Obj);
+            newChat.save();
+            res.status(200).send("already modified");
+            return ;
+    }
+
+    let priChats=await conversation.findOne({chatters:{$all:[receiverId,senderId.id]}});
+    if(!priChats){
+        priChats=new conversation({
+            chatters:[receiverId,senderId.id],
             messageDetails:[Obj]
         });
-        newChat.save({validateBeforSave:false});
-        return res.status(200).send("send");
+        priChats.save({validateBeforSave:false});
+        return;
+      //  return res.status(200).send("send");
     }
-    (newChat.messageDetails).push(Obj);
-    newChat.save();
-    res.status(200).send("already modified");}
+    (priChats.messageDetails).push(Obj);
+    priChats.save();
+    res.status(200).send("already modified")
+}
+
     catch(err){
         console.log(err);
         res.status(200).json({status:"success",err:err});
@@ -75,10 +99,21 @@ try{
 
 }; 
 exports.getSuperChats=async(req,res)=>{
-    let superChat=await conversation.findOne({chatters:{$all:['super','chats']}}).populate({path:"messageDetails",populate:{path:"senderId"}});
-    if(!superChat){
-        return;
+    if(req.query.receiver==""){
+        let superChat=await conversation.findOne({chatters:{$all:['super','chats']}}).populate({path:"messageDetails",populate:{path:"senderId"}});
+        if(!superChat){
+            return;
+        }
+        res.status(200).json({status:"success",chats:superChat.messageDetails});
     }
-    res.status(200).json({status:"success",chats:superChat.messageDetails});
+    else{
+        console.log(req.query);
+        let superChat=await conversation.findOne({chatters:{$all:[req.query.receiver,req.query.send]}}).populate({path:"messageDetails",populate:{path:"senderId"}});
+        console.log(superChat);
+        if(!superChat){
+            return;
+        }
+        res.status(200).json({status:"success",chats:superChat.messageDetails});
+    }
 
 }

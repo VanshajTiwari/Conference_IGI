@@ -31,7 +31,7 @@ Route.get("/dashboard/meeting",async (req,res)=>{
 Route.get("/dashboard/chats",async (req,res)=>{
     const user=req.session.user;
     const users=await UsersModel.find({});
-    res.status(200).render("chat.ejs",{title:"Chatting",user,users,sender:undefined});
+    res.status(200).render("chat.ejs",{title:"Chatting",user,users,sender:{id:""}});
 });
 Route.get("/dashboard/profile/update-password",(req,res)=>{
 

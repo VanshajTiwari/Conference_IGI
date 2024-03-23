@@ -45,7 +45,7 @@ io.on("connection",(socket)=>{
         roomObj=await data;
         // console.log(roomObj);
         socket.join(roomObj.roomId);
-      console.log(`${roomObj.userName} joined room ${JSON.stringify(roomObj)} ID`);
+   //   console.log(`${roomObj.userName} joined room ${JSON.stringify(roomObj)} ID`);
         // console.log(roomObj);
         users++;
         
@@ -58,11 +58,11 @@ io.on("connection",(socket)=>{
     //     rooms.add(roomID);
       
     // });
-    console.log("connected Users");
+   // console.log("connected Users");
     socket.on("disconnect",()=>{console.log("disconnected")});
     socket.on('send-message',({message,senderId,user})=>{
             const rooms = io.sockets.adapter.rooms;
-            console.log(rooms);
+      //      console.log(rooms);
          socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user});
        // io.except(senderId).to(roomObj.roomID).emit('receive-message',{message,user});
     });
