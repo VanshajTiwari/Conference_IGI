@@ -1,0 +1,68 @@
+[{
+  "_id": {
+    "$oid": "65954766949596f1f11d15e0"
+  },
+  "institution": "GLA University",
+  "institutionAddress": "Mathura",
+  "user": {
+    "$oid": "6591a51827228a2ff437196e"
+  },
+  "employID": "gla-university-6591a51827228a2ff437196e",
+  "userAddress": "House-81,Phase-2,Chaitanya Vihar ,Vrindavan",
+  "role": "Assistant Professor",
+  "mobile": {
+    "$numberLong": "9368644771"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65996a3a0b4f27aa8aefd7ae"
+  },
+  "institution": "Rajiv Academy of Management",
+  "institutionAddress": "Mathura",
+  "user": {
+    "$oid": "659549a1e99e9faeb416b209"
+  },
+  "employID": "rajiv-academy-of-management-659549a1e99e9faeb416b209",
+  "userAddress": "NH-2,Chaitanya Vihar,Vrindavan,Mathura",
+  "role": "Student",
+  "mobile": {
+    "$numberLong": "9368644771"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "659a81cb4b7b1b6ed6c0c326"
+  },
+  "institution": "BSA College",
+  "institutionAddress": "Mathura",
+  "user": {
+    "$oid": "6592ceda8145f4d9ae647278"
+  },
+  "employID": "bsa-college-6592ceda8145f4d9ae647278",
+  "userAddress": "Kishor pura, Vrindavan, Mathura",
+  "role": "Student",
+  "mobile": {
+    "$numberLong": "9368644771"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "659a8a62b01cb4f22bd4aa7f"
+  },
+  "institution": "GLA University",
+  "institutionAddress": "Mathura",
+  "user": {
+    "$oid": "659a8a42b01cb4f22bd4aa7b"
+  },
+  "employID": "gla-university-659a8a42b01cb4f22bd4aa7b",
+  "userAddress": "Kishor pura, Vrindavan, Mathura",
+  "role": "Student",
+  "mobile": {
+    "$numberLong": "9368644771"
+  },
+  "__v": 0
+}]
