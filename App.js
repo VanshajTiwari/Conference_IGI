@@ -44,6 +44,11 @@ App.all('*', (req, res) => {
 });
 let roomObj = {};
 io.on('connection', (socket) => {
+	socket.on('ping', () => {
+		const currTime = Date.now();
+		socket.emit('pong', currTime);
+	});
+	
 	socket.on('join-room', (data) => {
 		console.log(data);
 		socket.join(data.roomID);

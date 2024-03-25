@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="./styles/style.css">
     <script src="./js/functions.js" defer></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+
     <title>Dashboard</title>
 </head>
 <body> 
@@ -134,10 +136,12 @@
                 <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
               </svg>
             </div>
-            <div class="p-4 text-right">
-              <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Ping</p>
-              <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">99</h4>
-            </div>
+
+          <!-- gjrkeghergirgfewgrgniwnginuigbugewgwrg -->
+          <div class="p-4 text-right"> <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Ping</p>
+            <h4 id="ping-value" class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900"></h4>
+          </div>
+
             <div class="border-t border-blue-gray-50 p-4">
               <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
                 <strong class="text-green-500">Good</strong>&nbsp;
@@ -203,12 +207,47 @@
         <footer class="py-2">
             <div class="w-full pt-5 px-4 mb-8 flex ">
                 <div class="text-sm text-gray-700 py-1">
-                    Made with <a class="text-gray-700 font-semibold" href="https://www.material-tailwind.com/docs/html/form?ref=tailwindcomponents" target="_blank">💖</a> by <a href="https://www.creative-tim.com?ref=tailwindcomponents" class="text-gray-700 font-semibold" target="_blank"> Vanshaj Tiwari</a>.
+                    Made with <a class="text-gray-700 font-semibold" href="https://www.material-tailwind.com/docs/html/form?ref=tailwindcomponents" target="_blank">💖</a> by <a href="https://www.creative-tim.com?ref=tailwindcomponents" class="text-gray-700 font-semibold" target="_blank">MEET IGI</a>.
                 </div>
               </div>
         </footer>
       </div>
     </div>
   </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+const socket = io();
+
+let isPinging = false;
+
+function measurePing() {
+if (isPinging) {
+  return;
+}
+
+isPinging = true;
+
+    const startTime = Date.now();
+
+    const range = Math.floor(Math.random() * 99) + 1;
+    socket.emit('ping', range);
+
+    socket.once('pong', (currTime) => {
+        const ping = currTime - startTime + range;
+        // console.log('ping', ping);
+        updatePingValue(ping);
+        isPinging = false;
+    });
+}
+
+function updatePingValue(ping) {
+document.getElementById('ping-value').textContent = ping + " ms";
+}
+
+setInterval(measurePing, 3000);
+</script>
+
+
 </body>
 </html>
