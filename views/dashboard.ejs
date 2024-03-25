@@ -144,7 +144,7 @@
 
             <div class="border-t border-blue-gray-50 p-4">
               <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                <strong class="text-green-500">Good</strong>&nbsp;
+                <strong class="text-green-500 ping-signal">Good</strong>&nbsp;
               </p>
             </div>
           </div>
@@ -217,7 +217,7 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-const socket = io();
+const socket = io("http://127.0.0.1:7575/");
 
 let isPinging = false;
 
@@ -243,9 +243,25 @@ isPinging = true;
 
 function updatePingValue(ping) {
 document.getElementById('ping-value').textContent = ping + " ms";
+switch(true) {
+  case (ping <= 30):
+    
+    document.querySelector(".ping-signal").innerHTML = "Excellent";
+    break;
+  case (ping <= 60):
+
+    document.querySelector(".ping-signal").innerHTML = "Good";
+    break;
+  case (ping <= 100):
+    document.querySelector(".ping-signal").innerHTML = "Fair";
+    break;
+  default:
+    document.querySelector(".ping-signal").innerHTML = "Poor";
 }
 
-setInterval(measurePing, 3000);
+}
+
+setInterval(measurePing, 1000);
 </script>
 
 
