@@ -21,6 +21,7 @@ App.use('/', Express.static(path.join(__dirname, 'Public')));
 App.set('view-engine', 'ejs');
 App.set('views', path.join(__dirname, 'views'));
 
+
 //App.use(bodyParser({extended:true}));
 const io = new Server(
 	App.listen('7575', () => {
