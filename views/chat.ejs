@@ -103,18 +103,24 @@
               </button>
             </div>
           </div>
-        </nav>
-        <div class="bg-red-500 p-4 w-full min-h-16 h-auto rounded-lg">
-          <div>
-            <div class="flex justify-between">
-              <div class="users mx-1 w-[25%] h-[510px] overflow-x-hidden overflow-auto users--rooms">
-                <% for(let i of users){ %>
-                  <%if(i.id!=user.id){%>
-                    <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
-                      <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
-                        <h3 class="font-bold">
-                          <%=i.fullname%>
-                        </h3>
+
+        </div>
+      </nav>
+      <div class="bg-red-500 p-4 w-full min-h-[500px] h-[700px] rounded-lg">
+        <div>
+          <div class="flex justify-between">
+            <div class="users mx-1 w-[25%] h-[680px] overflow-x-hidden overflow-auto users--rooms">
+              <a href="http://127.0.0.1:7575/dashboard/chats" id="super--chats">
+                <div class="my-2 bg-violet-800 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
+                    <h3 class="font-bold text-[25px] text-center text-white">Super Chats</h3>
+                    
+                </div>           
+            </a>  
+              <% for(let i of users){ %>
+                <%if(i.id!=user.id){%>
+                <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
+                    <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
+                        <h3 class="font-bold"><%=i.fullname%></h3>
                         <p class="text-gray-400">~ This is message</p>
                       </div>
                     </a>
@@ -125,32 +131,32 @@
               <div class="__inbox w-[85%] mt-2">
                 <div class="bg-gray-50 ">
                   <div class="p-1 flex items-center">
-                    <%if(sender){%>
-                      <div class="m-2">
-                        <!-- <img src="" alt="">     div -->
-                        <div class="w-[50px] h-[50px] bg-blue-500 rounded-full overflow-hidden">
-                          <%if(sender.avatar){%>
-                            <img src="<%=sender.avatar%>" alt="pp" class="w-full h-auto">
-                            <%}else{%>
-                              <img src="/img/user.jpg" alt="user" />
-                              <%}%>
-                        </div>
-                      </div>
-                      <div>
-                        <div id="<%=sender.id%>" data-user-name="<%=sender.fullname%>" class="rooms">
-                          <h1 class="font-medium">
-                            <%=sender.fullname%>
-                          </h1>
-                          <span class="font-sans text-xs ml-2 status--user">Status</span>
-                        </div>
-                      </div>
-                      <%}else{ %>
-                        <div class="w-full bg-red-400 flex justify-center items-center">
-                          <div class="text-[20px] font-bold">Super Chats</div>
-                        </div>
-                        <%}%>
+
+                    <%if(sender.id!=""){%>
+                          <div class="m-2">
+                            <!-- <img src="" alt="">     div --> 
+                            <div class="w-[50px] h-[50px] bg-blue-500 rounded-full overflow-hidden">
+                              <%if(sender.avatar){%>
+                              <img src="<%=sender.avatar%>" alt="pp" class="w-full h-auto">
+                              <%}else{%>
+                                <img src="/img/user.jpg" alt="user"/>
+                                <%}%>
+                            </div>
+                          </div>
+                          <div>
+                              <div  id="<%=sender.id%>" data-user-name="<%=sender.fullname%>" class="rooms">
+                                  <h1 class="font-medium"><%=sender.fullname%></h1>
+                                  <span class="font-sans text-xs ml-2 status--user">Status</span>
+                              </div>
+                          </div> 
+                              <%}else{ %>
+                                <div class="w-full bg-red-400 flex justify-center items-center">
+                                  <div class="text-[20px] font-bold">Super Chats</div>
+                                </div>
+                                <%}%>
+
                   </div>
-                  <div class="max-h-[390px] overflow-auto bg-blue-500 messageBox">
+                  <div class="h-[540px] overflow-auto bg-blue-500 messageBox">
 
 
                     <!-- messages    -->
@@ -190,12 +196,13 @@
       <script>
         ////////////////////////////////////////////////////////////////////////////
 
-        const rooms = document.querySelectorAll(".rooms");
-        const set = new Set();
-        for (let i of rooms) {
-          socket.emit("all-users", { roomID: i.getAttribute('id') });
-        }
-        const send__Struct = (message, user = "<%=user.fullname%>", time = (new Date()).toLocaleString()) => `
+            // const rooms=document.querySelector(".rooms");
+            // const set=new Set();
+            // // for(let i of rooms){ 
+            // //   socket.emit("all-users",{roomID:i.getAttribute('id')});
+            // // }
+            const send__Struct=(message,user="<%=user.fullname%>",time=(new Date()).toLocaleString())=>`
+
                                       <div class="bg-red-100 float-right clear-both px-2 py-1 m-3 rounded-lg">
                                           <h1 class="text-red-400 font-bold">${user}</h1>
                                           <div class="font-medium max-w-[500px]">${message}</div>
@@ -212,68 +219,80 @@
                                             <span class="text-xs text-gray-500">${time}</span>
                                             <span class="text-xs">Read</span>
                                           </div>
-                                        </div>`
-        const messageBox = document.querySelector('.messageBox');
-        const sendMsgForm = document.querySelector(".--send-message-form");
-        sendMsgForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          if (!e.target[1].value)
-            return;
-          sendMsg("<%=user.id%>", e.target[1].value);
-          const sendMessage = document.createElement('div');
-          sendMessage.innerHTML = send__Struct(message = e.target[1].value);
-          messageBox.appendChild(sendMessage);
-          //////////////////////////////////////////////////////////////////////////////
-
-          socket.emit('send-message', { message: e.target[1].value, senderId: socket.id, user: "<%=user.fullname%>" });
-          //////////////////////////////////////////////////////////////////////////////
-          e.target.reset();
-        });
-        ////////////////////////////////////////////////////////////////////////////
-        socket.on('receive-message', ({ message, user }) => {
-          const recieveMessage = document.createElement('div');
-          recieveMessage.innerHTML = recieve__Struct(message, user);
-          messageBox.appendChild(recieveMessage);
-        });
-        ////////////////////////////////////////////////////////////////////////////
-        // socket.on("show-rooms",({rooms})=>{
-        //       const usersRooms=document.querySelector(".users--rooms");
-        //       function customElement(rooms){
-        //           return `
-        //           <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
-        //           <h3 class="font-bold">${rooms}</h3>
-        //           <p class="text-gray-400">~ This is message</p>
-        //           </div>
-        //           `}
-
-        //           for(let i=0;i<rooms.length;i++){
-        //             const newRoom=document.createElement("div");
-        //             newRoom.innerHTML=customElement(rooms[i]);
-        //             usersRooms.appendChild(newRoom);
-        //           }
-        //       });
-        ////////////////////////////////////////////////////////////////////////////
-        const rooms_ = document.querySelector(".rooms");
-        if (rooms_) {
-          const data = rooms_;
-          let { userName } = data.dataset;
-          socket.emit('join-room', { roomId: data.id, userName });
-        };
-        (async function () {
-          getMessage().then(E => {
-            for (let e of E) {
-              const sendMessage = document.createElement('div');
-              if (e.senderId.id == "<%=user.id%>") {
-                sendMessage.innerHTML = send__Struct(e.message, e.senderId.fullname, e.createdAt);
+                                        </div>`;
+            const messageBox=document.querySelector('.messageBox');
+            messageBox.scrollTo=messageBox.scrollHeight;
+            const sendMsgForm=document.querySelector(".--send-message-form");
+            sendMsgForm.addEventListener("submit",(e)=>{
+                e.preventDefault();
+              
+                if(!e.target[1].value)
+                  return;
+                if("<%=sender.id%>"==""){
+                  
+                  sendMsg("<%=user.id%>",e.target[1].value);
+                }
+                else{
+                 
+                  sendMsg("<%=user.id%>",e.target[1].value,`<%=sender._id%>`);
+                }
+                const sendMessage=document.createElement('div');
+                sendMessage.innerHTML=send__Struct(message=e.target[1].value);
                 messageBox.appendChild(sendMessage);
-              } else {
-                sendMessage.innerHTML = recieve__Struct(e.message, e.senderId.fullname, e.createdAt);
-                messageBox.appendChild(sendMessage);
+                //////////////////////////////////////////////////////////////////////////////
+                
+                socket.emit('send-message',{message:e.target[1].value,senderId:socket.id,user:"<%=user.fullname%>"});
+                //////////////////////////////////////////////////////////////////////////////
+                e.target.reset();
+            });
+            ////////////////////////////////////////////////////////////////////////////
+            socket.on('receive-message',({message,user})=>{
+              const recieveMessage=document.createElement('div');
+              recieveMessage.innerHTML=recieve__Struct(message,user);
+              messageBox.appendChild(recieveMessage);
+            });
+            ////////////////////////////////////////////////////////////////////////////
+            // socket.on("show-rooms",({rooms})=>{
+            //       const usersRooms=document.querySelector(".users--rooms");
+            //       function customElement(rooms){
+            //           return `
+            //           <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
+            //           <h3 class="font-bold">${rooms}</h3>
+            //           <p class="text-gray-400">~ This is message</p>
+            //           </div>
+            //           `}
+                      
+            //           for(let i=0;i<rooms.length;i++){
+            //             const newRoom=document.createElement("div");
+            //             newRoom.innerHTML=customElement(rooms[i]);
+            //             usersRooms.appendChild(newRoom);
+            //           }
+            //       });
+            ////////////////////////////////////////////////////////////////////////////
+            const rooms_=document.querySelector(".rooms");
+            if(rooms_){
+                const data=rooms_;
+                 let {userName}= data.dataset;
+                 socket.emit('join-room',{roomId:[data.id,"<%=user.id%>"],userName});
               }
+            else{
+              socket.emit("join-room",{roomId:"superChat",userName:"All"});
             }
-          })
-        })();
-      </script>
-  </body>
+              (async function(){
+                getMessage("<%=user.id%>","<%=sender.id%>").then(E=>{
+                  for(let e of E){
+                    const sendMessage=document.createElement('div');                  
+                    if(e.senderId.id=="<%=user.id%>"){
+                      sendMessage.innerHTML=send__Struct(e.message,e.senderId.fullname,e.createdAt);
+                      messageBox.appendChild(sendMessage);
+                  }else{ 
+                    sendMessage.innerHTML=recieve__Struct(e.message,e.senderId.fullname,e.createdAt);
+                    messageBox.appendChild(sendMessage);
+                  }}
+                })
+            })();
+        </script>
+      </body>
+
 
   </html>
