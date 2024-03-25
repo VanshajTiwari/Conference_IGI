@@ -21,6 +21,7 @@ App.use('/', Express.static(path.join(__dirname, 'Public')));
 App.set('view-engine', 'ejs');
 App.set('views', path.join(__dirname, 'views'));
 
+
 //App.use(bodyParser({extended:true}));
 const io = new Server(
 	App.listen('7575', () => {
@@ -44,6 +45,11 @@ App.all('*', (req, res) => {
 });
 let roomObj = {};
 io.on('connection', (socket) => {
+	socket.on('ping', () => {
+		const currTime = Date.now();
+		socket.emit('pong', currTime);
+	});
+	
 	socket.on('join-room', (data) => {
 		console.log(data);
 		socket.join(data.roomID);
@@ -58,6 +64,7 @@ io.on('connection', (socket) => {
 	//     rooms.add(roomID);
 
 	// });
+
 	console.log('connected Users');
 	socket.on('disconnect', () => {
 		console.log('disconnected');
