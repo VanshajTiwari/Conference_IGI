@@ -1,4 +1,4 @@
-const BASE_URL="http://127.0.0.1:7575"
+const BASE_URL="https://192.168.1.11:7575"
 const getMessage=async(sender,receiver)=>{
     const res=await axios({
         method:"GET",
@@ -16,3 +16,4 @@ const sendMsg=async(sender,message,receiver="")=>{
     
     return res;
 }
+ 

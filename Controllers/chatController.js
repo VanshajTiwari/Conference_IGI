@@ -30,9 +30,8 @@ exports.sendMessage=async(req,res)=>{
     }
 }
 exports.viewsMessage=async (req,res)=>{
-    console.log(req.params.id);
     const chats=await conversation.find({receiver:req.params.id}).populate('receiver sender');
-    console.log(chats);;
+
     res.status(200).json({
         status:"success",
         data:chats
@@ -52,7 +51,6 @@ try{
     const {sender,message}=req.body;
     const senderId=await Users.findById(sender);
     const Obj={senderId,message};
-    console.log(receiverId);
     if(!receiverId){
             let newChat=await conversation.findOne({chatters:{$all:['super','chats']}});
             
@@ -107,13 +105,12 @@ exports.getSuperChats=async(req,res)=>{
         res.status(200).json({status:"success",chats:superChat.messageDetails});
     }
     else{
-        console.log(req.query);
         let superChat=await conversation.findOne({chatters:{$all:[req.query.receiver,req.query.send]}}).populate({path:"messageDetails",populate:{path:"senderId"}});
-        console.log(superChat);
+        
         if(!superChat){
             return;
         }
         res.status(200).json({status:"success",chats:superChat.messageDetails});
     }
 
-}
+} 
