@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <title>Document</title>
+</head>
+<body>
+    <!-- component -->
+    <%- include("./commons/header")%>
+    <div class="p-4 xl:ml-80">
+      <nav class="block w-full max-w-full bg-transparent text-white shadow-none rounded-xl transition-all px-0 py-1">
+        <div class="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
+          <div class="capitalize">
+            <nav aria-label="breadcrumb" class="w-max">
+              <ol class="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
+                <li class="flex items-center text-blue-gray-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
+                  <a href="#">
+                    <p class="block antialiased font-sans text-sm leading-normal text-blue-900 font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100">dashboard</p>
+                  </a>
+                  <span class="text-gray-500 text-sm antialiased font-sans font-normal leading-normal mx-2 pointer-events-none select-none">/</span>
+                </li>
+                <li class="flex items-center text-blue-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-blue-500">
+                  <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">Files</p>
+                </li>
+              </ol>
+            </nav>
+            <h6 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-relaxed text-gray-900">Shared Files</h6>
+            <div class="w-[1400px] h-[700px] bg-red-500 rounded-lg">
+              <table class="w-full min-w-[640px] table-auto">
+                <thead>
+                  <tr>
+                    <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Name</p>
+                    </th>
+                    <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Type</p>
+                    </th>
+                    <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">date</p>
+                    </th>
+                    <th class="border-b border-blue-gray-50 py-3 px-6 text-left">
+                      <p class="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">Download</p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%for(let i of files){%>
+                    <tr>
+                      <td class="py-3 px-5 border-b border-blue-gray-50">
+                        <div class="flex items-center gap-4">
+                          <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold"><%=i.name%></p>
+                        </div>
+                      </td>
+                      
+                      <td class="py-3 px-5 border-b border-blue-gray-50">
+                        <p class="block antialiased font-sans text-xs font-medium text-blue-gray-600"><%=i.file_type%></p>
+                      </td>
+                      <td class="py-3 px-5 border-b border-blue-gray-50">
+                        <div class="w-10/12">
+                          <p class="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600"><%=i.createdAt%></p>
+                  
+                        </div>
+                      </td>
+                      <td class="py-3 px-5 border-b border-blue-gray-50">
+                        <div class="w-10/12">
+                          <a class="font-sans mb-1 block text-xs font-medium text-blue-gray-600 hover:underline" href="/uploads/<%=i.name+i.file_type%>" download>link</a>
+                  
+                        </div>
+                      </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+           
+        </div>
+      </nav>
+
+
+      </body>
+      </html>

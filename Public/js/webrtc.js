@@ -2,7 +2,7 @@ let localStream;
 let remoteStream;
 let PeerConnection;
 let didIOffer=false;
-
+const EndCallerBtn=document.querySelector("#End-Caller-voice");
 //DOM
 let peerConfiguration = {
     iceServers:[
@@ -41,10 +41,13 @@ async function addAnswer(offer){
         await PeerConnection.addIceCandidate(ICE);;
         //console.log(ICE);
     });
-    console.log("peerConnection");
-    console.log(PeerConnection);
+    // console.log("peerConnection");
+    // console.log(PeerConnection);
 
-    callers.innerHTML="Connected";
+    //callers.innerHTML="Connected";///////////////////////////////////////////////////////////////;
+    callers.classList.add("hidden");
+    EndCallerBtn.classList.remove("hidden");
+    EndCallerBtn.addEventListener('click',EndCall);
     return;
 }
 async function addNewIceCandidate(ICE){
@@ -76,8 +79,12 @@ async function createPeerConnection(remoteOffer){
         e.streams[0].getTracks().forEach(El=>{
             remoteStream.addTrack(El,remoteStream); 
         });
-        callingbtn.innerHTML="End Call";
-        socket.emit('endbtnvisible',"");
+        console.log(callingbtn);
+        callingbtn.classList.add("hidden");
+        EndCallerBtn.classList.remove("hidden");
+        // EndCallerBtn.classList.add("hidden");////////////////////////////////////////////////////////////////
+        EndCallerBtn.addEventListener("click",EndCall);
+        // socket.emit('endbtnvisible',"");
     }) 
     if(remoteOffer){
         PeerConnection.setRemoteDescription(remoteOffer.offer);
@@ -103,9 +110,17 @@ async function fetchUserMedia(){
 }
 async function EndCall(){
     await PeerConnection.close();
+    PeerConnection=null;
+    localStream=null;
+    remoteStream=null;
+    audioEl.srcObject=null;
+    EndCallerBtn.classList.add("hidden");
+    EndCallerBtn.removeEventListener("click",EndCall);
+    callingbtn.classList.remove("hidden");
 }
 const callers=document.querySelector(".caller-answer");
-callingbtn=document.querySelector(".call")
+callingbtn=document.querySelector(".call");
+if(callingbtn)
 callingbtn.addEventListener('click',(e)=>{
     document.querySelector(".caller-voice-span").innerHTML="Calling"
     e.target.closest(".call").style.backgroundColor="green";

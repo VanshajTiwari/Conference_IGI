@@ -1,11 +1,34 @@
 <%- include("./commons/boiler") %>
 <body>
-  <script src="/js/Api/apiCalls.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script> 
-      const userName="vanshaj"+Math.floor(Math.random()*1000000000);
-      const socket = io("https://192.168.1.11:7575",{auth:{userName}});
-  </script>
+  <style>
+        .sharefile--div{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: default;
+      z-index: 10000000;
+    }
+    .formfile{
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.6s;
+
+      animation: show 0.6s linear 1 ;
+    }
+    @keyframes show {
+      0%{ 
+        height: 0px;
+      }
+
+      100%{
+        height:100px;
+      }
+    }
+    .hidden{
+      display: none;
+    }
+  </style>
     <!-- component -->
     <%- include("./commons/header")%>
     <div class="p-4 xl:ml-80">
@@ -75,7 +98,7 @@
         <div>
           <div class="flex justify-between">
             <div class="users mx-1 w-[25%] h-[680px] overflow-x-hidden overflow-auto users--rooms">
-              <a href="https://192.168.1.11:7575/dashboard/chats" id="super--chats">
+              <a href="https://127.0.0.1:7575/dashboard/chats" id="super--chats">
                 <div class="my-2 bg-violet-800 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                     <h3 class="font-bold text-[25px] text-center text-white">Super Chats</h3>
                     
@@ -83,7 +106,7 @@
             </a>  
               <% for(let i of users){ %>
                 <%if(i.id!=user.id){%>
-                <a href="https://192.168.1.11:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
+                <a href="https://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
                     <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                         <h3 class="font-bold"><%=i.fullname%></h3>
                         <p class="text-gray-400">~ This is message</p>
@@ -129,6 +152,10 @@
                             <button class="call bg-black text-white rounded-full px-3 mx-2" id="offers-existed">
                                   <i class="fa-solid fa-phone text-[20px] m-4"></i>
                                   <span class="font-bold caller-voice-span">Call</span>
+                            </button>                            
+                            <button class="call bg-red-400 text-white rounded-full px-3 mx-2 hidden" id="End-Caller-voice">
+                              <i class="fa-solid fa-scissors text-[20px] m-4"></i>
+                              <span class="font-bold end-Caller-Voice-span">End Call</span>
                             </button>
                             <button class="callVideo bg-black text-white font-bold rounded-full px-3">
                               <i class="fa-solid fa-video text-[20px] m-4"></i>
@@ -136,26 +163,40 @@
                             </button>        
                           </div>
                         </div>
+                        <div id="videos" class="fixed w-[1540px] h-[670px] hidden-part bg-red-400 top-[100px] left-[350px] flex hidden">
+                          <video class="video-player w-1/2 p-3" id="local-video" autoplay playsinline controls></video>
+                          <button>End Call</button>
+                          <video class="video-player w-1/2 p-3" id="remote-video" autoplay playsinline controls></video>
+                      </div>
                             <%}else{ %>
                                 <div class="w-full bg-red-400 flex justify-center items-center">
                                   <div class="text-[20px] font-bold">Super Chats</div>
                                 </div>
                                 <%}%>
                   </div>
-                  <div class="h-[540px] overflow-auto bg-blue-500 messageBox">
-
-
+                  <div class="h-[540px]  overflow-auto bg-blue-500 messageBox" id="scroll-element">
+                 <div class="sharefile--div bg-gray-200 hidden w-full h-full hidden relative">
+                      <form  enctype="multipart/form-data" class="formfile bg-red-400 p-2 relative overflow-hidden" method="post">
+                      <input type="file" class="file--input" name="sharedFile" id="upload--btn" />
+                      <input type="hidden" class="file--input" name="senderID" value=<%=user.id%>>
+                      <input type="hidden" class="file--input" name="receiverID" value=<%=sender.id==""?"super--chats":sender.id%>>
+                      <div class="m-2">
+                        <button type="submit" class="shadow p-2 rounded-lg bg-white text-red-400 font-bold">Upload</button>
+                        <button type="button" class="shadow cancel-share-file p-2 rounded-lg bg-white text-red-400 font-bold">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
                                 <!-- messages    -->
                                 <!-- send Msg    -->
                                 <!-- message Msg -->
                                 
                   </div>
                   <div>
-                    <form action="" class="bg-yellow-500 flex justify-around w-full --send-message-form">
-                      <input type="file" class="hidden" name="files" id="file--0" >
-                      <label for="file--0" class="fa-solid fa-plus p-3"></label>
+                    <form action="" class="bg-yellow-500 flex w-full --send-message-form">
+                      
+                      <label for="upload--btn" class="fa-solid fa-plus p-3 upload--btn hover:bg-yellow-700 w-1/12 px-8"></label>
                       <input type="text" name="message" class="w-10/12 p-1">
-                      <input type="submit" value="submit" class="p-2">
+                      <input type="submit" value="submit" class="px-4 hover:bg-yellow-700 w-2/12">
                     </form>
                   </div>
                 </div>
@@ -168,16 +209,57 @@
             <div class="w-full pt-5 px-4 mb-8 flex ">
                 <div class="text-sm text-gray-700 py-1">
                  
-                    Made with <a class="text-gray-700 font-semibold" href="https://www.material-tailwind.com/docs/html/form?ref=tailwindcomponents" target="_blank">💖</a> by <a href="https://www.creative-tim.com?ref=tailwindcomponents" class="text-gray-700 font-semibold" target="_blank"> Vanshaj Tiwari</a>.
+                    Made with <a class="text-gray-700 font-semibold" href="https://www.material-tailwind.com/docs/html/form?ref=tailwindcomponents" target="_blank">💖</a> by <a href="https://www.creative-tim.com?ref=tailwindcomponents" class="text-gray-700 font-semibold" target="_blank"> Project IGI</a>.
                 </div>
               </div>
         </footer>
       </div>
       </div>
       <script>
-              document.querySelector("#file--0").addEventListener('click',()=>{
-              document.querySelector(".sharedFile");
-            });
+          const messageBox=document.querySelector('.messageBox');
+          function createSharedFileTemlate(_){
+            const sharedFileTemplate=document.createElement("div");
+            sharedFileTemplate.className="float-right px-2 clear-both py-1 m-3 rounded-lg relative min-w-[320px] min-h-[50px]";
+            sharedFileTemplate.innerHTML=`
+                <div class="absolute bg-red-100 rounded-md">
+                  <div class="flex justify-center items-center  p-3  gap-x-3">
+                  <div class="border w-12 h-12"><img src="/img/teams.png" alt="logo" class="w-full h-full"></div>
+                  <div class="h-12 flex justify-center items-center">${_.name}</div>
+                  <a class="h-12 w-12 border-2 flex justify-center items-center text-[35px] rounded-full border-2 border-black" href="/uploads/${_.name+_.file_type}" download>&downarrow;</a>
+                  </div>
+                  <div></div>
+              </div>`;
+
+            messageBox.appendChild(sharedFileTemplate);
+            console.log(sharedFileTemplate);
+
+          }
+        const shareFileForm=document.querySelector(".formfile");
+        shareFileForm.addEventListener('submit',e=>{
+          e.preventDefault();
+            const fileInputs=document.querySelectorAll(".file--input");
+            const file=fileInputs[0].files[0];
+            const senderID=fileInputs[1].value;
+            const receiverID=fileInputs[2].value;
+         //   console.log(file,senderID,receiverID);
+            const formData=new FormData();
+            formData.append('file',file);
+            formData.append('senderID',senderID);
+            formData.append('receiverID',receiverID);
+            
+          shareFile(formData).then(e=>{
+            createSharedFileTemlate(e);
+          });
+
+
+        })
+            document.querySelector('.upload--btn').addEventListener('click',(e)=>{
+      document.querySelector('.sharefile--div').classList.remove('hidden');
+    });
+    document.querySelector(".cancel-share-file").addEventListener("click",()=>{
+      document.querySelector('.sharefile--div').classList.add('hidden');
+    });
+
 
             const send__Struct=(message,user="<%=user.fullname%>",time=(new Date()).toLocaleString())=>`
                                       <div class="bg-red-100 float-right clear-both px-2 py-1 m-3 rounded-lg">
@@ -197,24 +279,22 @@
                                             <span class="text-xs">Read</span>
                                           </div>
                                         </div>`
-            const messageBox=document.querySelector('.messageBox');
-            messageBox.scrollTo=messageBox.scrollHeight;
+
             const sendMsgForm=document.querySelector(".--send-message-form");
             sendMsgForm.addEventListener("submit",(e)=>{
                 e.preventDefault();
-              
-                if(!e.target[1].value)
+                if(!e.target[0].value)
                   return;
                 if("<%=sender.id%>"==""){
-                  
-                  sendMsg("<%=user.id%>",e.target[1].value);
+                  console.log(e.target[0].value);
+                  sendMsg("<%=user.id%>",e.target[0].value);
                 }
                 else{
                  
-                  sendMsg("<%=user.id%>",e.target[1].value,`<%=sender._id%>`);
+                  sendMsg("<%=user.id%>",e.target[0].value,`<%=sender._id%>`);
                 }
                 const sendMessage=document.createElement('div');
-                sendMessage.innerHTML=send__Struct(message=e.target[1].value);
+                sendMessage.innerHTML=send__Struct(message=e.target[0].value);
                 messageBox.appendChild(sendMessage);
                 //////////////////////////////////////////////////////////////////////////////
                 
