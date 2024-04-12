@@ -161,7 +161,7 @@ exports.forgetPassword = async (req, res) => {
 		subject: 'Password reset Token',
 		message: `THIS is message is for reset Link reset Token:${
 			req.protocol
-		}//:${req.get('host')}${req.originalUrl}/${token}`,
+		}://${req.get('host')}${req.originalUrl}/${token}`,
 	});
 	res.status(200).json({
 		status: 'success',

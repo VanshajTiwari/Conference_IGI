@@ -3,6 +3,8 @@ const router=Express.Router();
 const uploadImg=require("./../utils/uploadImage");
 const {getAllUsers, handleProfile}=require('./../Controllers/userControllers');
 const {login,signup,protect,fillD,logout,forgetPassword, isLoggedin, resetForgotPassword, updatePassword}=require("./../Controllers/authController");
+const { uploadFileController, getsharedFileData } = require('../Controllers/shareFileController');
+
 router.get("/getAllusers",getAllUsers)
       .get("/logout",logout)
       .post("/signup",signup)
@@ -12,6 +14,8 @@ router.get("/getAllusers",getAllUsers)
       .get("/forget/:token",(req,res)=>res.render("forgetPassword.ejs",{title:"forgetPassword",token:req.params.token}))
       .post("/forget/:token",resetForgotPassword);
       router.use(isLoggedin);
+     router.post("/uploadfile",(req,res)=>uploadFileController(req,res));
+    //  router.get("/getsharedFile",getsharedFileData);
       router.post("/updatePassword/:id",updatePassword);
       router.post("/fillDetails",fillD);
       router.post('/uploadprofile',uploadImg.single('files'),handleProfile);;

@@ -27,8 +27,8 @@ App.set('view-engine', 'ejs');
 App.set('views', path.join(__dirname, 'views'));
 
 const expressServer=https.createServer({key,cert},App);
-expressServer.listen('7575',"192.168.1.11", () => {
-    console.log('https://192.168.1.11:7575');
+expressServer.listen('7575',"127.0.0.1", () => {
+    console.log('https://127.0.0.1:7575');
 })
 //App.use(bodyParser({extended:true}));
 const io =socket(expressServer);
@@ -63,6 +63,7 @@ const socketSet=[];
 
 io.on("connection",(socket)=>{
 	const {userName}=socket.handshake.auth;
+    console.log(userName + "     " +socket.id);
 	socket.on("addSocketIDs",(rooms)=>{
         
         socketSet.forEach(socketId=>{
@@ -119,8 +120,11 @@ io.on("connection",(socket)=>{
         offerObj.offerIceCandidate.push(iceCandidate);
         const offerInOffeers=offers.find(o=>o.AnsererUsername===iceUserName); 
         if(offerObj.AnsererUsername){
+            console.log(offerInOffeers);
             //pass it through to the other socket
-            const socketTosendTo=socketSet.find(s=>s.userName===offerInOffeers.AnsererUsername);
+            if(!offerInOffeers)
+                return ;
+                const socketTosendTo=socketSet.find(s=>s.userName===offerInOffeers.AnsererUsername);
             if(socketTosendTo){
                 socket.to(socketTosendTo.socketId).emit('recivedIceCandidateFromServer',iceCandidate);
             }else{

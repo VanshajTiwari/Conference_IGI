@@ -4,6 +4,7 @@ const Route=Express.Router();
 const meetingModel=require("./../Models/meeting");
 const UsersModel=require("./../Models/users");
 const institutionModel = require('../Models/institutionModel');
+const sharedFileModel=require("../Models/sharedFileModel");
 Route.get("/",(req,res)=>{ 
             res.status(200).render('index.ejs',{title:"Home"});
 });
@@ -25,8 +26,10 @@ Route.get("/dashboard",async (req,res)=>{
 Route.get("/dashboard/meeting",async (req,res)=>{
     const user=req.session.user;
     let meetings=await meetingModel.find({}).populate('createdBy');
+    const urMeetings=meetings.filter(ele=>ele.createdBy.id==user.id);
     meetings=meetings.filter(ele=>ele.createdBy.id!=user.id);
-    res.status(200).render("meeting.ejs",{title:"Meeting",user,meetings});
+   // console.log(urMeetings);
+    res.status(200).render("meeting.ejs",{title:"Meeting",user,urMeetings,meetings});
 })
 Route.get("/dashboard/chats",async (req,res)=>{
     const user=req.session.user;
@@ -54,7 +57,7 @@ Route.get("/dashboard/chats/:id",async (req,res)=>{
     
     res.status(200).render("chat.ejs",{title:"Chatting",user,users,sender:sender()});
 })
-Route.get("/dashboard/allmeeting",(req,res)=>{
+Route.get("/dashboard/allmeeting",async (req,res)=>{
     const user=req.session.user;
     res.status(200).render("AllMeeting.ejs",{title:"Schedules",user});
 })
@@ -65,6 +68,10 @@ Route.get("/dashboard/profile",async (req,res)=>{
 });
 Route.get("/dashboard/profile/filldetails",(req,res)=>{
     res.status(200).render('form.ejs',{title:"Profile",user:req.session.user});
+});
+Route.get("/dashboard/files",async (req,res)=>{
+    const AllFiles=await sharedFileModel.find({});
+    res.render("files.ejs",{title:"Files",user:req.session.user,files:AllFiles});
 })
 
 module.exports=Route;
