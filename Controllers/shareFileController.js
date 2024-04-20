@@ -4,10 +4,10 @@ const multer = require('multer');
 const path=require('path');
 const sharedFileModel=require('./../Models/sharedFileModel');
 const storage=multer.diskStorage({
-  destination:"./Public/uploads", 
+  destination:"./Public/share", 
   filename:(req,file,cb)=>{
     req.file=file;
-    const filename=path.basename(file.originalname)+path.extname(file.originalname);
+    const filename=file.originalname;
     cb(null,filename);
   }
 });

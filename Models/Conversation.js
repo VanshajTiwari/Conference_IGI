@@ -20,10 +20,16 @@ const conversation = Mongoose.Schema({
 				message: {
 					type: String,
 				},
+				shareType:{
+					type:String,
+					enum:["file","text"],
+					default:"text"
+				},
 				createdAt: {
 					type: Date,
 					default: Date.now(),
 				},
+
 			},
 		},
 	],
