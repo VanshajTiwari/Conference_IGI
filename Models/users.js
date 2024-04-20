@@ -54,6 +54,12 @@ const userSchema = new Mongoose.Schema(
 			default: 'participant',
 			select: false,
 		},
+		verified:{
+			type:Boolean,
+			required:[true,"not verified not Assigned"],
+			select:false,
+			default:false,
+		},
 		passwordChangedAt: {
 			type: Date,
 			select: false,

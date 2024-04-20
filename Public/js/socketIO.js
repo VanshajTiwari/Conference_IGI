@@ -1,8 +1,9 @@
 voiceSpan=document.querySelector(".caller-voice-span");
-socket.on("existedOffers",(offerObj)=>{
-    if(offerObj.offererUserName!=userName)    
-        createCallerEl(offerObj);
-});
+// socket.on("existedOffers",(offerObj)=>{
+//     console.log(offerObj);
+//     if(offerObj.offererUserName!=userName)    
+//         createCallerEl(offerObj);
+// });
 socket.on("callingResponse",(offerObj)=>{
     addCallRsponse(offerObj);
 });
@@ -33,7 +34,14 @@ function createCallerEl(offers){
     callers.style.display="block";
     callingbtn.style.display="none";
     offers.forEach(offer=>{
-        callers.addEventListener('click',()=>{callers.classList.add("hidden");addAnswer(offer)}); 
+        callers.addEventListener('click',()=>{
+            if(offer.communicationType){
+                videoWrapper.classList.toggle("hidden");
+                indoxBoard.classList.toggle("hidden");
+            callers.classList.add("hidden");addAnswer(offer,true); 
+            return;
+            }
+            callers.classList.add("hidden");addAnswer(offer)}); 
     });
 };
 

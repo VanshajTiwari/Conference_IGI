@@ -1,7 +1,10 @@
 let localStream;
 let remoteStream;
 let PeerConnection;
+let audioFlag=true;
 let didIOffer=false;
+const localVideoEl=document.querySelector("#local-video");
+const remoteVideoEl=document.querySelector("#remote-video");
 const EndCallerBtn=document.querySelector("#End-Caller-voice");
 //DOM
 let peerConfiguration = {
@@ -18,30 +21,41 @@ const audioEl=document.querySelector("#answerCall");
 const remoteEl=document.querySelector("#calleranswer");
 async function callAudio(){
     didIOffer=true;
-    await fetchUserMedia();
+    const communicationType=false;
+    await fetchUserMedia(communicationType);
    // audioEl.srcObject=stream;let remoteStream;
     await createPeerConnection();
     const offer=await PeerConnection.createOffer();
-    socket.emit("newOffer",offer);
+    socket.emit("newOffer",{offer,communicationType});
     PeerConnection.setLocalDescription(offer);
-    console.log(offer);
-}
-async function addAnswer(offer){
     
-    await fetchUserMedia();
-    await createPeerConnection(offer);
+}
+async function callVideo(){
+    didIOffer=true;
+    const communicationType=true;
+    await fetchUserMedia(true);
+    await createPeerConnection();
+    const offer=await PeerConnection.createOffer();
+    
+    socket.emit("newOffer",{offer,communicationType});
+    PeerConnection.setLocalDescription(offer);
+   
+}
+
+async function addAnswer(offer,flag=false){
+    await fetchUserMedia(flag);
+    await createPeerConnection(offer,flag); 
     const answer=await PeerConnection.createAnswer({});
     await PeerConnection.setLocalDescription(answer);
    // console.log(offer);
     offer.answer=answer;
     const iceCandidates=await socket.emitWithAck('newAnswer',offer);
    // console.log(PeerConnection);
-    iceCandidates.forEach(async ICE=>{
-        console.log(PeerConnection.signalingState);
+    iceCandidates.forEach(async ICE=>{ 
         await PeerConnection.addIceCandidate(ICE);;
-        //console.log(ICE);
+        //console.log(ICE); 
     });
-    // console.log("peerConnection");
+    // console.log("peerConnection"); 
     // console.log(PeerConnection);
 
     //callers.innerHTML="Connected";///////////////////////////////////////////////////////////////;
@@ -57,10 +71,14 @@ async function addCallRsponse(offerObj){
     console.log(offerObj.answer); 
     await PeerConnection.setRemoteDescription(offerObj.answer);
 }
-async function createPeerConnection(remoteOffer){
+async function createPeerConnection(remoteOffer,flag=false){
  return new Promise((res,rej)=>{   PeerConnection=new RTCPeerConnection(peerConfiguration);
     remoteStream=new MediaStream();
-    audioEl.srcObject=remoteStream;
+    if(flag){
+        remoteVideoEl.srcObject=remoteStream;
+    }
+    else
+        audioEl.srcObject=remoteStream;
     localStream.getTracks().forEach(track=>{
         PeerConnection.addTrack(track,localStream);
     });
@@ -79,7 +97,6 @@ async function createPeerConnection(remoteOffer){
         e.streams[0].getTracks().forEach(El=>{
             remoteStream.addTrack(El,remoteStream); 
         });
-        console.log(callingbtn);
         callingbtn.classList.add("hidden");
         EndCallerBtn.classList.remove("hidden");
         // EndCallerBtn.classList.add("hidden");////////////////////////////////////////////////////////////////
@@ -89,19 +106,21 @@ async function createPeerConnection(remoteOffer){
     if(remoteOffer){
         PeerConnection.setRemoteDescription(remoteOffer.offer);
     }res(); });
-}
+} 
 async function setAudioStream(){
     
 }
-async function fetchUserMedia(){
+async function fetchUserMedia(flag=false){
     return new Promise(async(res,rej)=>{
     try{const stream=await navigator.mediaDevices.getUserMedia({
-            audio:true,
+            audio:audioFlag,
+            video:flag
         });  
-        console.log(stream);
         localStream=stream;
+        if(flag)
+        localVideoEl.srcObject=localStream;
         res();}
-    catch(err){
+    catch(err){ 
         console.log(err.message);
         rej();
     }
@@ -125,3 +144,8 @@ callingbtn.addEventListener('click',(e)=>{
     document.querySelector(".caller-voice-span").innerHTML="Calling"
     e.target.closest(".call").style.backgroundColor="green";
     callAudio();});
+const span01=document.querySelector("#callingbtn");
+if(span01)
+document.querySelector("#callingbtn").addEventListener("click",()=>{
+    callVideo();
+}) 

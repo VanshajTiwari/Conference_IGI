@@ -10,15 +10,16 @@ function generateToken(id) {
 	};
 	token = jwt.sign({ id: id }, process.env.SECRET, { expiresIn: '2000s' });
 	return token;
-}
+};
 exports.login = async (req, res) => {
 	try {
+
 		const { email, password } = req.body;
 		let user = await Users.findOne({ email })
-			.select('+password')
+			.select('+password verified')
 			.populate('InstitutionDetails')
 			.populate('ownMeetings');
-
+	
 		if (!user || !(await user.correctPassword(password, user.password))) {
 			res.status(200).json({
 				status: 'Fail',
@@ -32,6 +33,9 @@ exports.login = async (req, res) => {
 		req.session.user = user;
 		if (!user.InstitutionDetails[0])
 			return res.redirect('/dashboard/profile/filldetails');
+		if(!user.verified)
+			return res.render("notActivated.ejs",{user});
+		
 		return res.redirect('/dashboard');
 	} catch (err) {
 		console.log(err);
@@ -58,7 +62,7 @@ exports.fillD = async (req, res) => {
 			institutionAddress,
 			userAddress,
 			username,
-			role,
+			role, 
 			mobile,
 			TimeZone,
 		} = req.body;
@@ -69,7 +73,7 @@ exports.fillD = async (req, res) => {
 		).populate('InstitutionDetails');
 		if (InstitutionDetails[0]) {
 			const instiDetails = await institutionModel.findOne({ user });
-			console.log({ instiDetails });
+			
 			const newDat = await institutionModel.updateOne(
 				{ _id: instiDetails.id },
 				{
@@ -99,11 +103,25 @@ exports.fillD = async (req, res) => {
 		});
 		await inst.save();
 		req.session.destroy();
-		res.redirect('/login');
+		user.InstitutionDetails=[inst];
+		sendEmail.getVerified({
+			data: user,
+			url:`${req.protocol}://${req.get('host')}`,
+			subject: 'Approve Account',
+			message: `Request for Approval`,
+		});
+
+		
+		res.render('notActivated.ejs',{user});
 	} catch (err) {
 		res.status(400).json({ status: 'error', message: err });
 	}
 };
+exports.getVerified=async(req,res)=>{
+	const {id}=req.params;
+	const user=await Users.findByIdAndUpdate(id,{verified:true});
+	res.status(200).json({status:"success",message:"User is Approved"});
+}
 exports.logout = async (req, res) => {
 	res.cookie('jwt', '');
 	req.session.destroy();
@@ -156,7 +174,7 @@ exports.forgetPassword = async (req, res) => {
 	user.save({ validateBeforeSave: false });
 	//3)send it to user's email
 
-	sendEmail({
+	sendEmail.sendMail({
 		email: user.email,
 		subject: 'Password reset Token',
 		message: `THIS is message is for reset Link reset Token:${
@@ -176,7 +194,7 @@ exports.resetForgotPassword = async (req, res) => {
 		.update(token)
 		.digest('hex');
 	const users = await Users.findOne({ passswordResetToken });
-	console.log(users);
+	// console.log(users);
 	users.password = password;
 	users.confirmpassword = confirmpassword;
 	users.save();
@@ -187,7 +205,7 @@ exports.updatePassword = async (req, res) => {
 		const { id } = req.params;
 		const { currpassword, password, confirmpassword } = req.body;
 		const users = await Users.findById(id).select('+password');
-		console.log(users);
+		// console.log(users);
 		if (!users.correctPassword(currpassword, users.password)) {
 			res.send('password Incorrect');
 		}

@@ -24,24 +24,26 @@ App.use(Express.urlencoded({ extended: true }));
 App.use('/', Express.static(path.join(__dirname, 'Public')));
 
 App.set('view-engine', 'ejs');
-App.set('views', path.join(__dirname, 'views'));
+App.set('views', path.join(__dirname, 'views')); 
+
 
 const expressServer=https.createServer({key,cert},App);
-expressServer.listen('7575',"127.0.0.1", () => {
-    console.log('https://127.0.0.1:7575');
+expressServer.listen('7575',"192.168.1.11", () => {
+    console.log('https://192.168.1.11:7575');
 })
 //App.use(bodyParser({extended:true}));
+// const io=socket(App.listen("7575",()=>{console.log("http://192.168.1.11:7575")}));
 const io =socket(expressServer);
 
 App.use(
 	expressSession({
 		secret: 'knsdnakfnd',
 		resave: false,
-		saveUninitialized: false,
+		saveUninitialized: false, 
 	})
 );
-App.use('/chats', chatRouter);
 App.use('/users', userRouter);
+App.use('/chats', chatRouter);
 App.use('/', viewRouter);
 App.use('/meeting', meetingRoute);
 App.all('*', (req, res) => {
@@ -100,14 +102,15 @@ io.on("connection",(socket)=>{
             }
         }
     });
-    socket.on("newOffer",(newOffer)=>{
+    socket.on("newOffer",({offer,communicationType})=>{
         offers.push({
             offererUserName:userName,
-            offer:newOffer,
+            offer:offer,
             offerIceCandidate:[],
             AnsererUsername:null,
             answer:null,
-            answererIceCandidate:[]
+            answererIceCandidate:[],
+            communicationType
         })
         socket.to(socketSet[0].socketId).emit("newOfferAwaiting",offers.slice(-1));
     });
@@ -148,18 +151,18 @@ io.on("connection",(socket)=>{
 		socket.emit('pong', currTime);
 	  });
     socket.on("join-room",async (data)=>{
-        roomObj=await data;
+        roomObj=await data; 
         socket.join(roomObj.roomId);
         users++;       
       });
 
     socket.on("disconnect",()=>{console.log("disconnected")});
-    socket.on('send-message',({message,senderId,user})=>{
+    socket.on('send-message',({message,senderId,user,type})=>{
            // const rooms = io.sockets.adapter.rooms;
-         socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user});
+         socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
 
     });
 });
 module.exports = { App };
  
- 
+  
