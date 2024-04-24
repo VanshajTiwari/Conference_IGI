@@ -25,6 +25,13 @@ Route.use(isLoggedin);
 
 
 
+Route.get("/meeting/projectIGI",(req,res)=>{
+    const token=req.query.token;
+    if(!token){
+       return res.redirect("/dashboard/meeting");
+    }
+    res.render("meetingPortal.ejs",{title:"joined",roomName:token,user:req.session.user});
+})
 
 
 Route.get("/notverified",(req,res)=>{
@@ -76,7 +83,6 @@ Route.get("/dashboard/chats/:id",async (req,res)=>{
     if(!sender()){
        return res.redirect("/dashboard/chats");
     }
-    console.log(user);
     res.status(200).render("chat.ejs",{title:"Chatting",user,users,sender:sender()});
 });
 
