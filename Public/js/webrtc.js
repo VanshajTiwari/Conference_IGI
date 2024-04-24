@@ -34,7 +34,7 @@ async function callVideo(){
     didIOffer=true;
     const communicationType=true;
     await fetchUserMedia(true);
-    await createPeerConnection();
+    await createPeerConnection("",true);
     const offer=await PeerConnection.createOffer();
     
     socket.emit("newOffer",{offer,communicationType});
@@ -74,7 +74,9 @@ async function addCallRsponse(offerObj){
 async function createPeerConnection(remoteOffer,flag=false){
  return new Promise((res,rej)=>{   PeerConnection=new RTCPeerConnection(peerConfiguration);
     remoteStream=new MediaStream();
+    console.log(flag);
     if(flag){
+        console.log(remoteStream);
         remoteVideoEl.srcObject=remoteStream;
     }
     else

@@ -78,7 +78,6 @@ async function leaveMeeting(){
     await PeerConnection.close();
     PeerConnection=null;
     remoteStream=null;
-    audioEl.srcObject=null;
 }
 async function callVideo(){
     didIOffer=true;

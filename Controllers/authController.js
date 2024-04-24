@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
 		if(!user.verified)
 			return res.render("notActivated.ejs",{user});
 		
-		return res.redirect('/dashboard');
+		return res.redirect('/dashboard/chats');
 	} catch (err) {
 		console.log(err);
 		return res.status(200).json({ status: 'failed', Error: err.message });
