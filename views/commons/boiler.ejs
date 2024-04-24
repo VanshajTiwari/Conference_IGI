@@ -13,7 +13,7 @@
     <script>      
         const userName={userName:"<%=user._id%>",idForMeeting:"<%=user.fullname%>"};
         const url="https://project-igi-chatting-application.onrender.com";
-        const socket = io(`https://${url}:7575`,{auth:{userName}});
+        const socket = io(`${url}`,{auth:{userName}});
         </script>
     <script src="/js/Api/apiCalls.js"></script>
 </head>
