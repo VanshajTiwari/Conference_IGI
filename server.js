@@ -1,5 +1,5 @@
-const App = require('./App');
-
+const App = require('./App').App;
+const io=require("./socketServer");
 const Mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');

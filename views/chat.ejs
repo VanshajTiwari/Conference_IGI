@@ -1,116 +1,104 @@
 <%- include("./commons/boiler") %>
+<body>
+  <style>
+        .sharefile--div{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: default;
+      z-index: 10000000;
+    }
+    .formfile{
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.6s;
 
-  <body>
-    <script src="/js/Api/apiCalls.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      const socket = io('http://127.0.0.1:7575/');
-    </script>
+      animation: show 0.6s linear 1 ;
+    }
+    @keyframes show {
+      0%{ 
+        height: 0px;
+      }
+
+      100%{
+        height:100px;
+      }
+    }
+    .hidden{
+      display: none;
+    }
+  </style>
     <!-- component -->
     <%- include("./commons/header")%>
-      <div class="p-4 xl:ml-80">
-        <nav class="block w-full max-w-full bg-transparent text-white shadow-none rounded-xl transition-all px-0 py-1">
-          <div class="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
-            <div class="capitalize">
-              <nav aria-label="breadcrumb" class="w-max">
-                <ol
-                          class="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
-                  <li
-                            class="flex items-center text-blue-gray-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
-                    <a href="#">
-                      <p
-                                class="block antialiased font-sans text-sm leading-normal text-blue-900 font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100">
-                        dashboard</p>
-                    </a>
-                    <span
-                              class="text-gray-500 text-sm antialiased font-sans font-normal leading-normal mx-2 pointer-events-none select-none">/</span>
-                  </li>
-                  <li
-                            class="flex items-center text-blue-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-blue-500">
-                    <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">Chat
-                    </p>
-                  </li>
-                </ol>
-              </nav>
-              <h6
-                        class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-relaxed text-gray-900">
-                Chat</h6>
-            </div>
-            <div class="flex items-center">
-              <div class="mr-auto md:mr-4 md:w-56">
-                <div class="relative w-full min-w-[200px] h-10">
-                  <input class="peer w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                            placeholder=" ">
-                  <label
-                            class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">Type
-                    here</label>
-                </div>
-              </div>
-              <button class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 grid xl:hidden"
-                        type="button">
-                <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
-                            stroke-width="3" class="h-6 w-6 text-blue-gray-500">
-                    <path fill-rule="evenodd"
-                              d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
-                              clip-rule="evenodd"></path>
-                  </svg>
-                </span>
-              </button>
-              <a href="#">
-                <button class="middle none font-sans font-bold center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 hidden items-center gap-1 px-4 xl:flex"
-                          type="button">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
-                            class="h-5 w-5 text-blue-gray-500">
-                    <path fill-rule="evenodd"
-                              d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                              clip-rule="evenodd"></path>
-                  </svg>User </button>
-                <button class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 grid xl:hidden"
-                          type="button">
-                  <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
-                              class="h-5 w-5 text-blue-gray-500">
-                      <path fill-rule="evenodd"
-                                d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                                clip-rule="evenodd"></path>
-                    </svg>
-                  </span>
-                </button>
-              </a>
-              <button class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                        type="button">
-                <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
-                            class="h-5 w-5 text-blue-gray-500">
-                    <path fill-rule="evenodd"
-                              d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
-                              clip-rule="evenodd"></path>
-                  </svg>
-                </span>
-              </button>
-              <button aria-expanded="false" aria-haspopup="menu" id=":r2:"
-                        class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                        type="button">
-                <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
-                            class="h-5 w-5 text-blue-gray-500">
-                    <path fill-rule="evenodd"
-                              d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-                              clip-rule="evenodd"></path>
-                  </svg>
-                </span>
-              </button>
-            </div>
+    <div class="p-4 xl:ml-80">
+      <nav class="block w-full max-w-full bg-transparent text-white shadow-none rounded-xl transition-all px-0 py-1">
+        <div class="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
+          <div class="capitalize">
+            <nav aria-label="breadcrumb" class="w-max">
+              <ol class="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
+                <li class="flex items-center text-blue-gray-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
+                  <a href="#">
+                    <p class="block antialiased font-sans text-sm leading-normal text-blue-900 font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100">dashboard</p>
+                  </a>
+                  <span class="text-gray-500 text-sm antialiased font-sans font-normal leading-normal mx-2 pointer-events-none select-none">/</span>
+                </li>
+                <li class="flex items-center text-blue-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-blue-500">
+                  <p class="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">Chat</p>
+                </li>
+              </ol>
+            </nav>
+            <h6 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-relaxed text-gray-900">Chat</h6>
           </div>
-
+          <div class="flex items-center">
+            <div class="mr-auto md:mr-4 md:w-56">
+              <div class="relative w-full min-w-[200px] h-10">
+                <input class="peer w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500" placeholder=" ">
+                <label class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">Type here</label>
+              </div>
+            </div>
+            <button class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 grid xl:hidden" type="button">
+              <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" stroke-width="3" class="h-6 w-6 text-blue-gray-500">
+                  <path fill-rule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" clip-rule="evenodd"></path>
+                </svg>
+              </span>
+            </button>
+            <a href="#">
+              <button class="middle none font-sans font-bold center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 hidden items-center gap-1 px-4 xl:flex" type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-5 w-5 text-blue-gray-500">
+                  <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd"></path>
+                </svg>User </button>
+              <button class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 grid xl:hidden" type="button">
+                <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-5 w-5 text-blue-gray-500">
+                    <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd"></path>
+                  </svg>
+                </span>
+              </button>
+            </a>
+            <button class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
+              <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-5 w-5 text-blue-gray-500">
+                  <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" clip-rule="evenodd"></path>
+                </svg>
+              </span>
+            </button>
+            <button aria-expanded="false" aria-haspopup="menu" id=":r2:" class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30" type="button">
+              <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-5 w-5 text-blue-gray-500">
+                  <path fill-rule="evenodd" d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z" clip-rule="evenodd"></path>
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
       </nav>
       <div class="bg-red-500 p-4 w-full min-h-[500px] h-[700px] rounded-lg">
         <div>
           <div class="flex justify-between">
             <div class="users mx-1 w-[25%] h-[680px] overflow-x-hidden overflow-auto users--rooms">
-              <a href="http://127.0.0.1:7575/dashboard/chats" id="super--chats">
+              <a href="/dashboard/chats" id="super--chats">
                 <div class="my-2 bg-violet-800 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                     <h3 class="font-bold text-[25px] text-center text-white">Super Chats</h3>
                     
@@ -118,91 +106,188 @@
             </a>  
               <% for(let i of users){ %>
                 <%if(i.id!=user.id){%>
-                <a href="http://127.0.0.1:7575/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
+                <a href="/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
                     <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                         <h3 class="font-bold"><%=i.fullname%></h3>
                         <p class="text-gray-400">~ This is message</p>
-                      </div>
-                    </a>
-                    <%}%>
-                      <%}%>
-              </div>
+                    </div>           
+                </a>  
+                <%}%>                               
+                <%}%>
+            </div>
 
-              <div class="__inbox w-[85%] mt-2">
-                <div class="bg-gray-50 ">
-                  <div class="p-1 flex items-center">
-
+            <div class="__inbox w-[85%] mt-2">
+                <div class="bg-gray-50">
+                  <div class="p-1 flex items-center relative">
                     <%if(sender.id!=""){%>
-                          <div class="m-2">
-                            <!-- <img src="" alt="">     div --> 
-                            <div class="w-[50px] h-[50px] bg-blue-500 rounded-full overflow-hidden">
-                              <%if(sender.avatar){%>
-                              <img src="<%=sender.avatar%>" alt="pp" class="w-full h-auto">
-                              <%}else{%>
-                                <img src="/img/user.jpg" alt="user"/>
-                                <%}%>
-                            </div>
-                          </div>
-                          <div>
-                              <div  id="<%=sender.id%>" data-user-name="<%=sender.fullname%>" class="rooms">
-                                  <h1 class="font-medium"><%=sender.fullname%></h1>
-                                  <span class="font-sans text-xs ml-2 status--user">Status</span>
+                      <div class="flex items-center justify-between w-full">
+                            <div class="flex">
+                              <div class="m-2">
+                                <!-- <img src="" alt="">     div --> 
+                                <div class="w-[50px] h-[50px] bg-blue-500 rounded-full overflow-hidden">
+                                  <%if(sender.avatar){%>
+                                  <img src="<%=sender.avatar%>" alt="pp" class="w-full h-auto">
+                                  <%}else{%>
+                                    <img src="/img/user.jpg" alt="user"/>
+                                    <%}%>
+                                </div> 
                               </div>
-                          </div> 
-                              <%}else{ %>
+                              <div>
+                                  <script>
+                                        const roomSocketID=["<%=sender.id%>","<%=user.id%>"];
+                                        socket.emit("addSocketIDs",roomSocketID);
+                                  </script>
+                                  <div  id="<%=sender.id%>" data-user-name="<%=sender.fullname%>" class="rooms">
+                                      <h1 class="font-medium"><%=sender.fullname%></h1>
+                                      <span class="font-sans text-xs ml-2 status--user">Status</span>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="flex  caller-view-call">
+                            <audio src="" id="answerCall" hidden></audio>
+                            <button style="display: none;" class="caller-answer bg-black text-white rounded-full px-3 mx-2" id="offers-existed">
+                                  <i class="fa-solid fa-phone text-[20px] m-4"></i>
+                                  <span class="font-bold caller-voice-span">Answer</span>
+                            </button>
+                            <button class="call bg-black text-white rounded-full px-3 mx-2" id="offers-existed">
+                                  <i class="fa-solid fa-phone text-[20px] m-4"></i>
+                                  <span class="font-bold caller-voice-span">Call</span>
+                            </button>                            
+                            <button class="call bg-red-400 text-white rounded-full px-3 mx-2 hidden" id="End-Caller-voice">
+                              <i class="fa-solid fa-scissors text-[20px] m-4"></i>
+                              <span class="font-bold end-Caller-Voice-span">End Call</span>
+                            </button>
+                            <button class="callVideo bg-black text-white font-bold rounded-full px-3" id="callingbtn">
+                              <i class="fa-solid fa-video text-[20px] m-4"></i>
+                              <span class="font-bold caller-video-span">Video</span>
+                            </button>        
+                          </div>
+                        </div>
+                            <%}else{ %>
                                 <div class="w-full bg-red-400 flex justify-center items-center">
                                   <div class="text-[20px] font-bold">Super Chats</div>
                                 </div>
                                 <%}%>
-
                   </div>
-                  <div class="h-[540px] overflow-auto bg-blue-500 messageBox">
-
-
-                    <!-- messages    -->
-                    <!-- send Msg    -->
-                    <!-- message Msg -->
-
+                <div>
+                  <div class="flex flex-col  hide-on-video-call">
+                  <div class="h-[540px]  overflow-auto bg-blue-500 messageBox" id="scroll-element">
+                    <div class="sharefile--div bg-gray-200 hidden w-full h-full hidden relative">
+                        <form  enctype="multipart/form-data" class="formfile bg-red-400 p-2 relative overflow-hidden" method="post">
+                        <input type="file" class="file--input" name="sharedFile" id="upload--btn" />
+                        <input type="hidden" class="file--input" name="senderID" value=<%=user.id%>>
+                        <input type="hidden" class="file--input" name="receiverID" value=<%=sender.id==""?"super--chats":sender.id%>>
+                        <div class="m-2">
+                          <button type="submit" class="shadow p-2 rounded-lg bg-white text-red-400 font-bold">Upload</button>
+                          <button type="button" class="shadow cancel-share-file p-2 rounded-lg bg-white text-red-400 font-bold">Cancel</button>
+                        </div>
+                      </form>
+                    </div>
+                                  <!-- messages    -->
+                                  <!-- send Msg    -->
+                                  <!-- message Msg -->
+                                  
+                    </div>
+                    <div>
+                      <form action="" class="bg-yellow-500 flex w-full --send-message-form">
+                        
+                        <label for="upload--btn" class="fa-solid fa-plus p-3 upload--btn hover:bg-yellow-700 w-1/12 px-8"></label>
+                        <input type="text" name="message" class="w-10/12 p-1">
+                        <input type="submit" value="submit" class="px-4 hover:bg-yellow-700 w-2/12">
+                      </form>
+                    </div>
                   </div>
-                  <div>
-                    <form action="" class="bg-yellow-500 flex justify-around w-full --send-message-form">
-
-
-                      <input type="file" class="hidden" name="files" id="file--0">
-                      <i class="fa-solid fa-plus p-3 file--00"></i>
-                      <input type="text" name="message" class="w-10/12 p-1">
-                      <input type="submit" value="submit" class="p-2">
-                    </form>
+                  <div id="videos" class="relative h-full w-full hidden-part bg-red-400 top-0 flex hidden">
+                    <video class="video-player w-1/2 p-3" id="local-video" autoplay playsinline controls></video>
+                    <button class="callVideo" id="endCall">End Call</button>
+                    <video class="video-player w-1/2 p-3" id="remote-video" autoplay playsinline controls></video>
                   </div>
                 </div>
-              </div>
+                </div>
+
             </div>
           </div>
         </div>
-        <div class="text-blue-gray-600">
-          <footer class="py-2">
+      </div>
+      <div class="text-blue-gray-600">
+        <footer class="py-2">
             <div class="w-full pt-5 px-4 mb-8 flex ">
-              <div class="text-sm text-gray-700 py-1">
-
-                Made with <a class="text-gray-700 font-semibold"
-                          href="https://www.material-tailwind.com/docs/html/form?ref=tailwindcomponents"
-                          target="_blank">💖</a> by <a href="https://www.creative-tim.com?ref=tailwindcomponents"
-                          class="text-gray-700 font-semibold" target="_blank"> Vanshaj Tiwari</a>.
+                <div class="text-sm text-gray-700 py-1">
+                 
+                    Made with <a class="text-gray-700 font-semibold" href="https://www.material-tailwind.com/docs/html/form?ref=tailwindcomponents" target="_blank">💖</a> by <a href="https://www.creative-tim.com?ref=tailwindcomponents" class="text-gray-700 font-semibold" target="_blank"> Project IGI</a>.
+                </div>
               </div>
-            </div>
-          </footer>
-        </div>
+        </footer>
+      </div>
       </div>
       <script>
-        ////////////////////////////////////////////////////////////////////////////
+          const indoxBoard=document.querySelector(".hide-on-video-call");
+          const videoWrapper=document.querySelector("#videos");
+          const showVideobtn=document.querySelectorAll(".callVideo");
+          showVideobtn.forEach(e=>{
+            e.addEventListener("click",(_)=>{
+            
+            videoWrapper.classList.toggle("hidden");
+            indoxBoard.classList.toggle("hidden");
+            if(e.id=="callingbtn"){
+              console.log("VIDEO CALL");
+            }
+            if(e.id=="endCall"){
+              console.log("END CALL");
+            }
+            
+          })});
+          const messageBox=document.querySelector('.messageBox');
+          function createSharedFileTemlate(_,dir){
+            console.log("FILES                          "+            _);
+            const sharedFileTemplate=document.createElement("div");
+            sharedFileTemplate.className=`float-${dir} px-2 clear-both py-1 m-3 rounded-lg relative min-w-[320px] min-h-[50px]`;
+            sharedFileTemplate.innerHTML=`
+                <div class="absolute bg-red-100 rounded-md">
+                  <div class="flex justify-center items-center  p-3  gap-x-3">
+                  <div class="border w-12 h-12"><img src="/img/teams.png" alt="logo" class="w-full h-full"></div>
+                  <div class="h-12 flex justify-center items-center">${_}</div>
+                  <a class="h-12 w-12 border-2 flex justify-center items-center text-[35px] rounded-full border-2 border-black" href="/share/${_}" download>&downarrow;</a>
+                </div>
+              </div>`;
+ 
+            messageBox.appendChild(sharedFileTemplate);
+            console.log(sharedFileTemplate);
 
-            // const rooms=document.querySelector(".rooms");
-            // const set=new Set();
-            // // for(let i of rooms){ 
-            // //   socket.emit("all-users",{roomID:i.getAttribute('id')});
-            // // }
+          }
+        const shareFileForm=document.querySelector(".formfile");
+        shareFileForm.addEventListener('submit',e=>{
+          e.preventDefault();
+            const fileInputs=document.querySelectorAll(".file--input");
+            const file=fileInputs[0].files[0];
+            const senderID=fileInputs[1].value;
+            const receiverID=fileInputs[2].value;
+         //   console.log(file,senderID,receiverID);
+            const formData=new FormData();
+            formData.append('file',file);
+            formData.append('senderID',senderID);
+            formData.append('receiverID',receiverID);
+            formData.append("type","file");
+            
+            shareFile(formData).then(e=>{
+              console.log();
+            });
+            createSharedFileTemlate(file.name,"right");
+          console.log(file);
+          socket.emit('send-message',{message:file.name,senderId:socket.id,user:"<%=user.fullname%>",type:"file"});
+                //////////////////////////////////////////////////////////////////////////////
+            e.target.reset();
+
+        })
+            document.querySelector('.upload--btn').addEventListener('click',(e)=>{
+      document.querySelector('.sharefile--div').classList.remove('hidden');
+    });
+    document.querySelector(".cancel-share-file").addEventListener("click",()=>{
+      document.querySelector('.sharefile--div').classList.add('hidden');
+    });
+
+
             const send__Struct=(message,user="<%=user.fullname%>",time=(new Date()).toLocaleString())=>`
-
                                       <div class="bg-red-100 float-right clear-both px-2 py-1 m-3 rounded-lg">
                                           <h1 class="text-red-400 font-bold">${user}</h1>
                                           <div class="font-medium max-w-[500px]">${message}</div>
@@ -211,7 +296,7 @@
                                             <span class="text-xs">Read</span>
                                           </div>
                                         </div>`
-        const recieve__Struct = (message, user, time = (new Date()).toLocaleString()) => `
+            const recieve__Struct=(message,user,time=(new Date()).toLocaleString())=>`
                                         <div class="bg-red-100 float-left clear-both px-2 py-1 m-3 rounded-lg">
                                           <h1 class="text-green-400 font-bold">${user}</h1>
                                           <div class="font-medium max-w-[500px]">${message}</div>
@@ -219,36 +304,38 @@
                                             <span class="text-xs text-gray-500">${time}</span>
                                             <span class="text-xs">Read</span>
                                           </div>
-                                        </div>`;
-            const messageBox=document.querySelector('.messageBox');
-            messageBox.scrollTo=messageBox.scrollHeight;
+                                        </div>`
+
             const sendMsgForm=document.querySelector(".--send-message-form");
             sendMsgForm.addEventListener("submit",(e)=>{
                 e.preventDefault();
-              
-                if(!e.target[1].value)
+                if(!e.target[0].value)
                   return;
                 if("<%=sender.id%>"==""){
-                  
-                  sendMsg("<%=user.id%>",e.target[1].value);
+                  sendMsg("<%=user.id%>",e.target[0].value);
                 }
                 else{
                  
-                  sendMsg("<%=user.id%>",e.target[1].value,`<%=sender._id%>`);
+                  sendMsg("<%=user.id%>",e.target[0].value,`<%=sender._id%>`);
                 }
                 const sendMessage=document.createElement('div');
-                sendMessage.innerHTML=send__Struct(message=e.target[1].value);
+                sendMessage.innerHTML=send__Struct(message=e.target[0].value);
                 messageBox.appendChild(sendMessage);
                 //////////////////////////////////////////////////////////////////////////////
                 
-                socket.emit('send-message',{message:e.target[1].value,senderId:socket.id,user:"<%=user.fullname%>"});
+                socket.emit('send-message',{message:e.target[0].value,senderId:socket.id,user:"<%=user.fullname%>",type:"text"});
                 //////////////////////////////////////////////////////////////////////////////
                 e.target.reset();
             });
             ////////////////////////////////////////////////////////////////////////////
-            socket.on('receive-message',({message,user})=>{
+            socket.on('receive-message',({message,user,type})=>{
+              console.log(message);
               const recieveMessage=document.createElement('div');
-              recieveMessage.innerHTML=recieve__Struct(message,user);
+              if(type=="text")
+                recieveMessage.innerHTML=recieve__Struct(message,user);
+              else{
+                let file={name:message};
+                recieveMessage.innerHTML=createSharedFileTemlate(message,"left");}
               messageBox.appendChild(recieveMessage);
             });
             ////////////////////////////////////////////////////////////////////////////
@@ -292,7 +379,8 @@
                 })
             })();
         </script>
+        <script src="/js/webrtc.js"></script>
+        <script src="/js/socketIO.js"></script>
       </body>
 
-
-  </html>
+      </html>

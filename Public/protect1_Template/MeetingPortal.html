@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Meet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="w-screen h-screen items-center bg-gray-300 overflow-hidden">
+    <div class="w-[100%] h-[100%] rounded-lg">
+        <div class="client-- flex flex-wrap w-6/8 h-full">
+            <div class="w-[80%] h-screen">
+                <div class="bg-white flex justify-center items-center video--face w-[95%] h-[60%] p-4 m-4 rounded-lg overflow-hidden">
+                    <video src="" controls autoplay class="w-full h-full  rounded-lg"></video>
+                </div>            
+                <div class="other-video flex flex-wrap justify-start overflow-x-auto bg-gray-300 h-[40%]">
+                    <div class="bg-white p-3  text-center rounded-lg m-3 w-[300px] h-[300px]">
+                        <span class="text-2xl">Vanshaj Tiwari</span>
+                        <video src="" controls class="rounded-lg w-full h-[230px] "></video>
+                    </div>
+                </div>
+            </div>
+            <div class="w-[20%] h-full">
+                    <div class="w-[90%] bg-white h-[86%] flex flex-col items-center m-[4%] rounded-lg">
+                        <span class="text-[30px]">Group Chat</span>
+                        <span class="border-2 w-full"></span>
+                        <div class="video-chats--box h-[80%] w-[90%] overflow-auto bg-white rounded-lg">
+
+                                    <div class="m-3 float-right clear-both">
+                                        <span class="flex justify-end mr-2">Vanshaj Tiwari</span>
+                                        <div class="bg-gray-200 p-3 rounded-lg">this is Msg</div>
+                                        <span class="text-[12px] float-right text-gray-500">19/12/200</span>
+                                    </div>
+                        </div>
+                        <div class=" absolute bottom-2 bg-gray-400 p-3 rounded-lg">
+                            <form action="" class="video-calling-msgbox-form flex justify-center items-center ">
+                                <textarea class="rounded-lg w-[225px] p-2" placeholder="Type Message..." required></textarea>
+                                <button type="submit" class="ml-3"><i class="fa-solid fa-paper-plane bg-red-400 p-4 rounded-full hover:bg-red-200"></i></button>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class=" fixed left-[50%] bottom-8 w-0">
+        <div class="flex justify-center bg-red-200">
+
+        
+                    <button class="p-3 border-2 border-black hover:bg-white rounded-lg text-[25px] m-3 hover:pointer">
+                        <i class="fa-solid fa-video"></i>
+                        <!-- <i class="fa-solid fa-video-slash"></i> -->
+                    </button>
+                    <button class="p-3 border-2 border-black hover:bg-white rounded-lg  text-[25px] m-3 hover:pointer">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <!-- <i class="fa-solid fa-volume-xmark"></i> -->
+                    </button>
+                    <button class="p-3 border-2 border-black hover:bg-white rounded-lg  text-[25px] m-3 hover:pointer">
+                        <i class="fa-solid fa-desktop"></i>
+                    </button>
+                    <button class="p-3 border-2 border-black hover:bg-white rounded-lg  text-[25px] m-3 hover:pointer" >
+                        <i class="fa-solid fa-record-vinyl"></i>
+                    </button>
+                    <button class="p-3 border-2 border-black hover:bg-white rounded-lg  text-[25px] m-3 hover:pointer">
+                        <i class="fa-solid fa-camera-retro"></i>
+                    </button>
+                    <button class="p-3 border-2 border-black rounded-lg text-white bg-red-400 flex justify-center items-center m-3  hover:pointer">
+                        <i class="fa-solid fa-x"></i>&nbsp;
+                        <span class="font-bold">END</span>
+                    </button>
+        </div>
+    </div>
+    <script src="./customScript.js"></script>
+</body>
+</html>
