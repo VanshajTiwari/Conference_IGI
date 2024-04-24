@@ -28,11 +28,11 @@ App.set('views', path.join(__dirname, 'views'));
 
 
 const expressServer=https.createServer({key,cert},App);
-expressServer.listen('7575',"192.168.1.11", () => {
-    console.log('https://192.168.1.11:7575');
-})
+expressServer.listen('7575',"192.168.26.122", () => {
+    console.log('https://192.168.26.122:7575');
+}) 
 //App.use(bodyParser({extended:true}));
-// const io=socket(App.listen("7575",()=>{console.log("http://192.168.1.11:7575")}));
+// const io=socket(App.listen("7575",()=>{console.log("http://192.168.150.122:7575")}));
 const io =socket(expressServer);
 
 App.use(
@@ -64,8 +64,9 @@ const offers=[
 const socketSet=[];
 
 io.on("connection",(socket)=>{
-	const {userName}=socket.handshake.auth;
-    console.log(userName + "     " +socket.id);
+	const {userName,idForMeeting}=socket.handshake.auth.userName;
+    const socketIdforMeeting=socket.id;
+    console.log(userName +" "+ idForMeeting+" " +socket.id);
 	socket.on("addSocketIDs",(rooms)=>{
         
         socketSet.forEach(socketId=>{
@@ -73,7 +74,7 @@ io.on("connection",(socket)=>{
                     rooms=socketId;
                 }
         });
-        socketSet.push({userName,socketId:rooms});
+        socketSet.push({userName,socketId:rooms,idForMeeting});
 
     });
     if(offers.length){
@@ -123,6 +124,7 @@ io.on("connection",(socket)=>{
         offerObj.offerIceCandidate.push(iceCandidate);
         const offerInOffeers=offers.find(o=>o.AnsererUsername===iceUserName); 
         if(offerObj.AnsererUsername){
+            console.log("---------------------------");
             console.log(offerInOffeers);
             //pass it through to the other socket
             if(!offerInOffeers)
@@ -137,7 +139,15 @@ io.on("connection",(socket)=>{
   
                 }
         }else{
+            console.log("0------------------------------------------");
+            console.log(iceUserName);
+            console.log("0------------------------------------------");
+
+            console.log(offers);
+            console.log("0------------------------------------------");
+            //
             const offerInOffeers=offers.find(o=>o.AnsererUsername===iceUserName);
+            
             const socketTosendTo=socketSet.find(s=>s.userName===offerInOffeers.offererUserName);
             if(socketTosendTo){
                 socket.to(socketTosendTo.socketId).emit('recivedIceCandidateFromServer',iceCandidate);
@@ -162,7 +172,15 @@ io.on("connection",(socket)=>{
          socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
 
     });
-});
-module.exports = { App };
+    ////// VIDEO MEETING LOGICS
+
+
+    socket.on("sendMsgInMeeting",({roomName,msg})=>{
+          socket.join(roomName);
+          socket.except(socket.id).emit('receive-message-in-meeting',{msg,idForMeeting});
+ 
+     });
+    });
+module.exports = { App,io };
  
   

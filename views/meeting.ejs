@@ -120,7 +120,7 @@
                               <div class="font-normal leading-relaxed antialiased">
                                   <span class="whitespace-nowrap">Time: <%=i.startAt%></span><br/>
                                   <span>Type: <%=i.agenda%></span><br/>
-                                  <span class="whitespace-nowrap">UserID: <%=i.meetingID%></span><br/>
+                                  <span class="whitespace-nowrap">UserID: <span id="Meetinglink" class="hidden"><%=i.meetingID%></span><button class="copybtn border-2 border-red-300 p-2 rounded-lg">Copy Link</button></button></span><br/>
                                   <span>password:<%=i.password%></span>
                               </div>
                            
@@ -253,6 +253,16 @@
 </div>    
 </body>
 <script>
-  console.log(Boolean("<%=meetings.length%>"))
+          function copyLink() {
+            const linkInput = document.querySelector('#Meetinglink');
+            console.log(linkInput.innerHTML);
+            navigator.clipboard.writeText(linkInput.innerHTML)
+            document.execCommand('copy');
+            console.log("copied");
+        }
+        const btnToCopyLink=document.querySelector(".copybtn");
+        btnToCopyLink.addEventListener("click",()=>{
+          copyLink();
+        })
 </script>
 </html>
