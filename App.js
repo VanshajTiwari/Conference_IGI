@@ -27,12 +27,12 @@ App.set('view-engine', 'ejs');
 App.set('views', path.join(__dirname, 'views')); 
 
 
-const expressServer=https.createServer({key,cert},App);
-expressServer.listen('7575', () => { 
-    console.log('https://192.168.26.122:7575');
-}) 
+// const expressServer=https.createServer({key,cert},App);
+// expressServer.listen('7575', () => { 
+//     console.log('https://192.168.26.122:7575');
+// }) 
 //App.use(bodyParser({extended:true}));
-// const io=socket(App.listen("7575",()=>{console.log("http://192.168.150.122:7575")}));
+const io=socket(App.listen("7575",()=>{console.log("https://project-igi-chatting-application.onrender.com")}));
 const io =socket(expressServer);
 
 App.use(
