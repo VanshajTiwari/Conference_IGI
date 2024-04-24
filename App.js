@@ -28,8 +28,8 @@ App.set('views', path.join(__dirname, 'views'));
 
 
 const expressServer=https.createServer({key,cert},App);
-expressServer.listen('7575',"192.168.26.122", () => {
-    console.log('https://192.168.26.122:7575');
+expressServer.listen('7575',"192.168.26.122", () => { 
+    console.log('https://92.168.26.122:7575');
 }) 
 //App.use(bodyParser({extended:true}));
 // const io=socket(App.listen("7575",()=>{console.log("http://192.168.150.122:7575")}));
@@ -66,7 +66,6 @@ const socketSet=[];
 io.on("connection",(socket)=>{
 	const {userName,idForMeeting}=socket.handshake.auth.userName;
     const socketIdforMeeting=socket.id;
-    console.log(userName +" "+ idForMeeting+" " +socket.id);
 	socket.on("addSocketIDs",(rooms)=>{
         
         socketSet.forEach(socketId=>{
@@ -139,14 +138,7 @@ io.on("connection",(socket)=>{
   
                 }
         }else{
-            console.log("0------------------------------------------");
-            console.log(iceUserName);
-            console.log("0------------------------------------------");
-
-            console.log(offers);
-            console.log("0------------------------------------------");
-            //
-            const offerInOffeers=offers.find(o=>o.AnsererUsername===iceUserName);
+            const offerInOffeers=offers.find(o=>o.AnsererUsername===iceUserName.userName);
             
             const socketTosendTo=socketSet.find(s=>s.userName===offerInOffeers.offererUserName);
             if(socketTosendTo){
