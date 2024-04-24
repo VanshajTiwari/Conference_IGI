@@ -33,7 +33,7 @@ App.set('views', path.join(__dirname, 'views'));
 // }) 
 //App.use(bodyParser({extended:true}));
 const io=socket(App.listen("7575",()=>{console.log("https://project-igi-chatting-application.onrender.com")}));
-const io =socket(expressServer);
+// const io =socket(expressServer);
 
 App.use(
 	expressSession({
