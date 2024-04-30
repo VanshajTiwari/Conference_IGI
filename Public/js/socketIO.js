@@ -1,3 +1,8 @@
+const ringtone=document.querySelector(".ringtone-set");
+if(ringtone)
+ringtone.addEventListener("click",(e)=>{
+    e.target.play();
+})
 voiceSpan=document.querySelector(".caller-voice-span");
 // socket.on("existedOffers",(offerObj)=>{
 //     console.log(offerObj);
@@ -9,7 +14,7 @@ socket.on("callingResponse",(offerObj)=>{
 });
 socket.on("newOfferAwaiting",(offerObj)=>{
     if(offerObj.offererUserName!=userName)    
-            createCallerEl(offerObj);
+        createCallerEl(offerObj);
     // callingbtn.style.display="none";
 })
 // socket.on("showEndCallbtn",()=>{
@@ -30,7 +35,7 @@ socket.on('recivedIceCandidateFromServer',iceCandidate=>{
     addNewIceCandidate(iceCandidate);
 });
 function createCallerEl(offers){
-    
+    ringtone.click();
     callers.style.display="block";
     callingbtn.style.display="none";
     offers.forEach(offer=>{

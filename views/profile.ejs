@@ -1,6 +1,6 @@
 <%- include('./commons/boiler') %>
 <body>
-  
+  <script src="/js/notification.js" defer></script>
   <%- include("./commons/header")%>
     <div class="p-4 xl:ml-80">
       <nav class="block w-full max-w-full bg-transparent text-white shadow-none rounded-xl transition-all px-0 py-1">
@@ -9,7 +9,7 @@
             <nav aria-label="breadcrumb" class="w-max">
               <ol class="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
                 <li class="flex items-center text-blue-gray-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
-                  <a href="#">
+                  <a href="/dashboard">
                     <p class="block antialiased font-sans text-sm leading-normal text-blue-900 font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100">dashboard</p>
                   </a>
                   <span class="text-gray-500 text-sm antialiased font-sans font-normal leading-normal mx-2 pointer-events-none select-none">/</span>
@@ -69,9 +69,9 @@
                 <div class="bg-violet-500 p-6 rounded-lg text-white shadow">
                     
                     <div class="xl:flex justify-between items-center ">
-                        <div class="rounded-full flex justify-center items-center min-w-[250px] min-h-[250px] bg-red-400 overflow-hidden hover:cursor-pointer" id="set--profile">
+                        <div class="rounded-full flex justify-center items-center w-[250px] h-[250px] bg-red-400 overflow-hidden hover:cursor-pointer" id="set--profile">
                          <% if(user.avatar){ %>
-                            <img src="<%=user.avatar%>" alt="User" class="w-full"/>
+                            <img src="<%=user.avatar%>" alt="User" class="h-full w-full object-cover"/>
                           <%}else{%>
                             <div class="bg-gray-700 w-full text-center py-5">No Profile</div>
                           <%}%>

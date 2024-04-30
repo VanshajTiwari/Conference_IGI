@@ -34,6 +34,6 @@ function createNotification(type,user,msg){
 };
 socket.emit("join-room-notifier",userName.userName);
 socket.on("notification",({type,user,message})=>{
-  // console.log("runned");
+   console.log("runned");
   createNotification(type,user,message);
 });

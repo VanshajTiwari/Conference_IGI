@@ -127,7 +127,7 @@
                                 <!-- <img src="" alt="">     div --> 
                                 <div class="w-[50px] h-[50px] bg-blue-500 rounded-full overflow-hidden">
                                   <%if(sender.avatar){%>
-                                  <img src="<%=sender.avatar%>" alt="pp" class="w-full h-auto">
+                                  <img src="<%=sender.avatar%>" alt="pp" class="h-full w-full object-cover">
                                   <%}else{%>
                                     <img src="/img/user.jpg" alt="user"/>
                                     <%}%>
@@ -145,18 +145,18 @@
                               </div>
                           </div>
                           <div class="flex  caller-view-call">
-                            <audio src="" id="answerCall" hidden></audio>
+                            <audio src="/audio/audio--1.mp3" id="answerCall" class="ringtone-set hidden" controls loop></audio>
                             <button style="display: none;" class="caller-answer bg-black text-white rounded-full px-3 mx-2" id="offers-existed">
                                   <i class="fa-solid fa-phone text-[20px] m-4"></i>
                                   <span class="font-bold caller-voice-span">Answer</span>
                             </button>
                             <button class="call bg-black text-white rounded-full px-3 mx-2" id="offers-existed">
                                   <i class="fa-solid fa-phone text-[20px] m-4"></i>
-                                  <span class="font-bold caller-voice-span hidden sm:block">Call</span>
+                                  <span class="font-bold caller-voice-span hidden md:flex">Call</span>
                             </button>                            
                             <button class="call bg-red-400 text-white rounded-full px-3 mx-2 hidden" id="End-Caller-voice">
                               <i class="fa-solid fa-scissors text-[20px] m-4"></i>
-                              <span class="font-bold end-Caller-Voice-span hidden sm:block">End Call</span>
+                              <span class="font-bold end-Caller-Voice-span hidden md:flex">End Call</span>
                             </button>
                             <button class="callVideo bg-black text-white font-bold rounded-full px-3" id="callingbtn">
                               <i class="fa-solid fa-video text-[20px] m-4"></i>
@@ -315,11 +315,11 @@
                 if(!e.target[0].value)
                   return;
                 if("<%=sender.id%>"==""){
-                  sendMsg("<%=user.id%>",e.target[0].value);
+                 sendMsg("<%=user.id%>",e.target[0].value);
                 }
                 else{
                  
-                  sendMsg("<%=user.id%>",e.target[0].value,`<%=sender._id%>`);
+                 sendMsg("<%=user.id%>",e.target[0].value,`<%=sender._id%>`);
                 }
                 const sendMessage=document.createElement('div');
                 sendMessage.innerHTML=send__Struct(message=e.target[0].value);

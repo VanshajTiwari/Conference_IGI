@@ -156,19 +156,32 @@ io.on("connection",(socket)=>{
     socket.on("join-room",async (data)=>{
         roomObj=await data; 
         socket.join(roomObj.roomId);
+       
         users++;       
       });
 
-    socket.on("disconnect",()=>{console.log("disconnected")});
+    socket.on("disconnect",()=>{
+        socket.leaveAll();
+        console.log("disconnected")});
 
     socket.on("join-room-notifier",(_)=>{
         socket.join(_);
-        console.log("joined"+ " "+_);
+        
     })
     socket.on('send-message',({message,senderId,user,type})=>{
-         socket.to(roomObj.roomId[0]).emit("notification",{message,user,type});
-         socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
-
+        const uniqueRoom=io.sockets.adapter.rooms;
+        if(roomObj.roomId=="superChat"){
+            socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
+            return;
+        }
+        console.log(uniqueRoom.get(roomObj.roomId[0]));
+        if(uniqueRoom.get(roomObj.roomId[1]).size==1){
+               
+             socket.to(roomObj.roomId[0]).emit("notification",{message,user,type});}
+        else{
+          
+             socket.to(roomObj.roomId[0]).except(senderId).emit('receive-message',{message,user,type});
+        }
     });
     ////// VIDEO MEETING LOGICS
 
@@ -178,6 +191,6 @@ io.on("connection",(socket)=>{
  
      });
     });
-module.exports = { App,io };
+module.exports = { App,io }; 
  
   

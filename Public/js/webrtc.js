@@ -43,6 +43,7 @@ async function callVideo(){
 }
 
 async function addAnswer(offer,flag=false){
+    ringtone.stop();
     await fetchUserMedia(flag);
     await createPeerConnection(offer,flag); 
     const answer=await PeerConnection.createAnswer({});
@@ -116,11 +117,14 @@ async function fetchUserMedia(flag=false){
     return new Promise(async(res,rej)=>{
     try{const stream=await navigator.mediaDevices.getUserMedia({
             audio:audioFlag,
-            video:flag
+            video:flag 
         });  
         localStream=stream;
-        if(flag)
-        localVideoEl.srcObject=localStream;
+        if(flag){
+            const mediaSTream=new MediaStream();
+            mediaSTream.addTrack(localStream.getTracks().find(e=>e.kind=="video"),mediaSTream);
+            localVideoEl.srcObject=mediaSTream;
+        }
         res();}
     catch(err){ 
         console.log(err.message);
