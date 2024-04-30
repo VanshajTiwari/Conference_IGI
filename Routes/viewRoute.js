@@ -15,7 +15,7 @@ Route.get("/",(req,res)=>{
 Route.get("/login",(req,res)=>{
     res.status(200).render("login.ejs",{title:"Login"});
 })
-
+ 
 Route.get("/signup",async(req,res)=> {
     
     res.status(200).render("signup.ejs",{title:"Signup"});
@@ -43,7 +43,7 @@ Route.get("/dashboard",async (req,res)=>{
     .populate('ownMeetings');
     let meetings=(await meetingModel.find({})).length;
     req.session.user=user;
-    console.log(user);
+    // console.log(user);
     const userCount=(await institutionModel.find({institution:user.InstitutionDetails[0].institution})).length;
 
     res.render("dashboard.ejs",{title:"Dashboard",user:user,meetings,totalUsers:userCount});

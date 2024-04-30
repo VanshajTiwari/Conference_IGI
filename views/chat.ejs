@@ -1,5 +1,6 @@
 <%- include("./commons/boiler") %>
-<body>
+<body class="loader--class">
+  <%- include("./commons/loader.ejs")%>
   <style>
         .sharefile--div{
       display: flex;
@@ -57,7 +58,7 @@
                 <label class="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">Type here</label>
               </div>
             </div>
-            <button class="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 grid xl:hidden" type="button">
+            <button class="relative  menu--toggle--btn middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 grid xl:hidden" type="button">
               <span class="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" stroke-width="3" class="h-6 w-6 text-blue-gray-500">
                   <path fill-rule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" clip-rule="evenodd"></path>
@@ -94,11 +95,11 @@
           </div>
         </div>
       </nav>
-      <div class="bg-red-500 p-4 w-full min-h-[500px] h-[700px] rounded-lg">
+      <div class="bg-red-500 p-4 w-full min-h-[300px] max-h-[700px] rounded-lg">
         <div>
-          <div class="flex justify-between">
-            <div class="users mx-1 w-[25%] h-[680px] overflow-x-hidden overflow-auto users--rooms">
-              <a href="/dashboard/chats" id="super--chats">
+          <div class="md:flex block justify-between">
+            <div class="users flex overflow-auto w-full min-h-[50px] md:block mx-1 md:w-[25%] md:h-[680px] md:overflow-x-hidden overflow-auto users--rooms">
+              <a href="/dashboard/chats" id="super--chats" class="m-2 md:m-0">
                 <div class="my-2 bg-violet-800 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                     <h3 class="font-bold text-[25px] text-center text-white">Super Chats</h3>
                     
@@ -106,8 +107,8 @@
             </a>  
               <% for(let i of users){ %>
                 <%if(i.id!=user.id){%>
-                <a href="/dashboard/chats/<%=i.id%>" id="<%=i.id%>">
-                    <div class="my-2 bg-gray-200 max-w-[260px] p-5 rounded-lg hover:cursor-pointer hover:bg-gray-300">
+                <a href="/dashboard/chats/<%=i.id%>" id="<%=i.id%>" class="m-2 md:m-0">
+                    <div class="my-2 bg-gray-200 min-h-[60px] min-w-[150px] max-w-[260px] p-4 rounded-lg hover:cursor-pointer hover:bg-gray-300">
                         <h3 class="font-bold"><%=i.fullname%></h3>
                         <p class="text-gray-400">~ This is message</p>
                     </div>           
@@ -116,7 +117,7 @@
                 <%}%>
             </div>
 
-            <div class="__inbox w-[85%] mt-2">
+            <div class="__inbox w-full h-[620px] mt-2">
                 <div class="bg-gray-50">
                   <div class="p-1 flex items-center relative">
                     <%if(sender.id!=""){%>
@@ -151,15 +152,15 @@
                             </button>
                             <button class="call bg-black text-white rounded-full px-3 mx-2" id="offers-existed">
                                   <i class="fa-solid fa-phone text-[20px] m-4"></i>
-                                  <span class="font-bold caller-voice-span">Call</span>
+                                  <span class="font-bold caller-voice-span hidden sm:block">Call</span>
                             </button>                            
                             <button class="call bg-red-400 text-white rounded-full px-3 mx-2 hidden" id="End-Caller-voice">
                               <i class="fa-solid fa-scissors text-[20px] m-4"></i>
-                              <span class="font-bold end-Caller-Voice-span">End Call</span>
+                              <span class="font-bold end-Caller-Voice-span hidden sm:block">End Call</span>
                             </button>
                             <button class="callVideo bg-black text-white font-bold rounded-full px-3" id="callingbtn">
                               <i class="fa-solid fa-video text-[20px] m-4"></i>
-                              <span class="font-bold caller-video-span">Video</span>
+                              <span class="font-bold caller-video-span hidden sm:block">Video</span>
                             </button>        
                           </div>
                         </div>
@@ -171,7 +172,7 @@
                   </div>
                 <div>
                   <div class="flex flex-col  hide-on-video-call">
-                  <div class="h-[540px]  overflow-auto bg-blue-500 messageBox" id="scroll-element">
+                  <div class="h-[350px] md:h-[560px]  overflow-auto bg-blue-500 messageBox" id="scroll-element">
                     <div class="sharefile--div bg-gray-200 hidden w-full h-full hidden relative">
                         <form  enctype="multipart/form-data" class="formfile bg-red-400 p-2 relative overflow-hidden" method="post">
                         <input type="file" class="file--input" name="sharedFile" id="upload--btn" />
@@ -189,11 +190,13 @@
                                   
                     </div>
                     <div>
-                      <form action="" class="bg-yellow-500 flex w-full --send-message-form">
+                      <form action="" class="bg-yellow-500 flex justify-between w-full --send-message-form">
                         
-                        <label for="upload--btn" class="fa-solid fa-plus p-3 upload--btn hover:bg-yellow-700 w-1/12 px-8"></label>
-                        <input type="text" name="message" class="w-10/12 p-1">
-                        <input type="submit" value="submit" class="px-4 hover:bg-yellow-700 w-2/12">
+                        <label for="upload--btn" class="flex justify-center rounded-full items-center upload--btn hover:bg-yellow-200 w-[60px]  ">
+                          <span class="text-[35px]  hover:rotate-360 transition-transform duration-500">+</span>
+                        </label>
+                        <input type="text" name="message" class="w-11/12 p-1">
+                        <input type="submit" value="Submit" class="px-4 hover:bg-yellow-700">
                       </form>
                     </div>
                   </div>

@@ -1,3 +1,22 @@
 .active{
     background:linear-gradient(to top right, blue,white);
 }
+.loader--class{
+    overflow: hidden;
+    cursor: wait;
+}
+
+.box {
+    position: relative;
+    right: -200px;
+    animation: slideIn 1s forwards;
+}
+
+@keyframes slideIn {
+    from {
+        right: -200px;
+    }
+    to {
+        right: 0;
+    }
+}

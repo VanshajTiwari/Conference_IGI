@@ -75,7 +75,7 @@ async function createPeerConnection(remoteOffer,flag=false){
  return new Promise((res,rej)=>{   PeerConnection=new RTCPeerConnection(peerConfiguration);
     remoteStream=new MediaStream();
     console.log(flag);
-    if(flag){
+    if(flag){ 
         console.log(remoteStream);
         remoteVideoEl.srcObject=remoteStream;
     }

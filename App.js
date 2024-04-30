@@ -28,8 +28,8 @@ App.set('views', path.join(__dirname, 'views'));
 
 
 const expressServer=https.createServer({key,cert},App);
-expressServer.listen('7575',"192.168.26.122", () => { 
-    console.log('https://92.168.26.122:7575');
+expressServer.listen('7575',"192.168.1.11", () => { 
+    console.log('https://192.168.1.11:7575');
 }) 
 //App.use(bodyParser({extended:true}));
 // const io=socket(App.listen("7575",()=>{console.log("http://192.168.150.122:7575")}));
@@ -64,6 +64,7 @@ const offers=[
 const socketSet=[];
 
 io.on("connection",(socket)=>{
+
 	const {userName,idForMeeting}=socket.handshake.auth.userName;
     const socketIdforMeeting=socket.id;
 	socket.on("addSocketIDs",(rooms)=>{
@@ -159,8 +160,13 @@ io.on("connection",(socket)=>{
       });
 
     socket.on("disconnect",()=>{console.log("disconnected")});
+
+    socket.on("join-room-notifier",(_)=>{
+        socket.join(_);
+        console.log("joined"+ " "+_);
+    })
     socket.on('send-message',({message,senderId,user,type})=>{
-           // const rooms = io.sockets.adapter.rooms;
+         socket.to(roomObj.roomId[0]).emit("notification",{message,user,type});
          socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
 
     });
@@ -168,7 +174,6 @@ io.on("connection",(socket)=>{
 
 
     socket.on("sendMsgInMeeting",({roomName,msg})=>{
-          socket.join(roomName);
           socket.except(socket.id).emit('receive-message-in-meeting',{msg,idForMeeting});
  
      });
