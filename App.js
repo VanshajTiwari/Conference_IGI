@@ -8,10 +8,10 @@ const userRouter = require('./Routes/userRoute');
 const chatRouter = require('./Routes/ChatRoute');
 const viewRouter = require('./Routes/viewRoute');
 const meetingRoute = require('./Routes/meeting');
-const fs=require('fs');
+// const fs=require('fs');
 const https=require('https');
-const key=fs.readFileSync(__dirname+"/create-cert-key.pem");
-const cert=fs.readFileSync(__dirname+"/create-cert.pem");
+// const key=fs.readFileSync(__dirname+"/create-cert-key.pem");
+// const cert=fs.readFileSync(__dirname+"/create-cert.pem");
 const socket = require('socket.io');
 
 const expressSession = require('express-session');
@@ -27,13 +27,13 @@ App.set('view-engine', 'ejs');
 App.set('views', path.join(__dirname, 'views')); 
 
 
-const expressServer=https.createServer({key,cert},App);
-expressServer.listen('7575',"192.168.70.122", () => { 
-    console.log('https://192.168.70.122:7575');
-}) 
+// const expressServer=https.createServer({key,cert},App);
+// expressServer.listen('7575',"192.168.70.122", () => { 
+//     console.log('https://192.168.70.122:7575');
+// }) 
 //App.use(bodyParser({extended:true}));
-// const io=socket(App.listen("7575",()=>{console.log("http://192.168.150.122:7575")}));
-const io =socket(expressServer);
+const io=socket(App.listen("7575",()=>{console.log("http://192.168.150.122:7575")}));
+// const io =socket(expressServer);
 
 App.use(
 	expressSession({
