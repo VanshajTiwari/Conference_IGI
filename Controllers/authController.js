@@ -4,6 +4,8 @@ const crypt = require('crypto');
 const sendEmail = require('./../utils/sendEmail');
 const institutionModel = require('./../Models/institutionModel');
 const slug = require('slug');
+const catchAsync=require("./../utils/errorHandler");
+
 function generateToken(id) {
 	let option = {
 		expiresIn: '1h',
@@ -11,9 +13,7 @@ function generateToken(id) {
 	token = jwt.sign({ id: id }, process.env.SECRET, { expiresIn: '2000s' });
 	return token;
 };
-exports.login = async (req, res) => {
-	try {
-
+exports.login = catchAsync(async (req, res) => {
 		const { email, password } = req.body;
 		let user = await Users.findOne({ email })
 			.select('+password verified')
@@ -37,12 +37,9 @@ exports.login = async (req, res) => {
 			return res.render("notActivated.ejs",{user});
 		
 		return res.redirect('/dashboard');
-	} catch (err) {
-		console.log(err);
-		return res.status(200).json({ status: 'failed', Error: err.message });
-	}
-};
-exports.signup = async (req, res) => {
+	
+});
+exports.signup =catchAsync( async (req, res) => {
 	const { fullname, email, password, confirmpassword } = req.body;
 	const data = await Users.create({
 		fullname,
@@ -54,7 +51,7 @@ exports.signup = async (req, res) => {
 	req.session.user = data;
 	res.cookie('jwt', token, { secure: true });
 	return res.redirect('/dashboard/profile/filldetails');
-};
+});
 exports.fillD = async (req, res) => {
 	try {
 		const {

@@ -5,7 +5,22 @@ let audioFlag=true;
 let didIOffer=false;
 
 const localVideoEl=document.querySelector("#videoMeetingEl");
-
+const remoteUsers=document.querySelector(".other-video");
+function addCandidate(user,socketID){
+    const El=document.createElement('div');
+    El.id=socketID;
+    El.className="bg-white p-3  text-center rounded-lg m-3 w-[300px] h-[300px]";
+    const template=()=>`
+    <span class="text-2xl">${user}</span>
+    <video src="" controls class="rounded-lg w-full h-[230px] "></video>
+    `
+    El.innerHTML=template(user);
+    remoteUsers.appendChild(El);
+    return;
+}
+function cleanCandidate(){
+    return;
+}
 function peerConfiguration(){
     return {
         iceServers:[
@@ -34,28 +49,17 @@ const videoCalling=document.querySelector(".video-calling-msgbox-form");
 videoCalling.addEventListener("submit",(e)=>{
     e.preventDefault();
     msgMaker(userNameForMeeting,e.target[0].value);
-    socket.emit("sendMsgInMeeting",{roomName,msg:e.target[0].value});
+    meetingNameSpace.emit("sendMsgInMeeting",{roomName,msg:e.target[0].value});
 
     e.target[0].value="";
 });
 
 
-function addRemoteUser(){
-    const div=document.createElement("div");
-    div.className="bg-red-300 p-3 text-center rounded-lg m-3 w-[300px] h-[300px]"
-    div.innerHTML=`
-    <span class="text-2xl">Vanshaj Tiwari</span>
-    <video src="" controls class="rounded-lg w-full h-[230px] "></video>
-    `;
-    
-};
+
 
 //sockets
 
-socket.on("receive-message-in-meeting",({msg,idForMeeting})=>{
 
-    msgMaker(idForMeeting,msg);
-});
 
 async function fetchUserMedia(){
     return new Promise(async (res,rej)=>{
@@ -64,7 +68,9 @@ async function fetchUserMedia(){
                 audio:true,
                 video:true
             });
-            localStream=stream;
+            const medi=new MediaStream();
+            medi.addTrack(stream.getTracks().find(e=>e.kind=='video'),medi);
+            localStream=medi;
             localVideoEl.srcObject=localStream;
             res();
         }
@@ -89,7 +95,7 @@ async function callVideo(){
 async function createPeerConnection(remoteOffer){
     return new Promise((res,rej)=>{   PeerConnection=new RTCPeerConnection(peerConfiguration);
        remoteStream=new MediaStream();
-       remoteVideoEl.srcObject=remoteStream;
+    //    remoteVideoEl.srcObject=remoteStream;
        localStream.getTracks().forEach(track=>{
            PeerConnection.addTrack(track,localStream);
        });
@@ -121,3 +127,16 @@ async function createPeerConnection(remoteOffer){
    callVideo();
 
 
+//sockets
+meetingNameSpace.on("receive-message-in-meeting",({msg,ComUser})=>{
+    msgMaker(ComUser,msg);
+});
+meetingNameSpace.on("newUser",(data)=>{
+    remoteUsers.innerHTML="";
+    for(let i of data){
+        if(i.ComUser!=ComUser)
+        addCandidate(i.ComUser,i.id);
+    }
+    meetingNameSpace.emit("pattha","");
+})
+meetingNameSpace.emit("addCandidates","");

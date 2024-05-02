@@ -1,0 +1,15 @@
+<div class="loader-content">
+    <div class="fixed w-screen h-screen bg-black opacity-75"></div>
+    <div class="fixed w-screen h-screen flex justify-center items-center">
+  
+      <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+  
+      <dotlottie-player src="https://lottie.host/14ce7e04-ac33-487c-9598-4e6a311f2b5b/5WZB2LaZS4.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player> </div>
+</div>
+<script>
+    window.addEventListener("load",()=>{
+    // console.log("page is loaded");
+    document.querySelector("body").classList.remove("loader--class");
+    document.querySelector(".loader-content").classList.add("hidden");
+    })
+</script>

@@ -8,10 +8,10 @@ const userRouter = require('./Routes/userRoute');
 const chatRouter = require('./Routes/ChatRoute');
 const viewRouter = require('./Routes/viewRoute');
 const meetingRoute = require('./Routes/meeting');
-const fs=require('fs');
+// const fs=require('fs');
 const https=require('https');
-const key=fs.readFileSync(__dirname+"/create-cert-key.pem");
-const cert=fs.readFileSync(__dirname+"/create-cert.pem");
+// const key=fs.readFileSync(__dirname+"/create-cert-key.pem");
+// const cert=fs.readFileSync(__dirname+"/create-cert.pem");
 const socket = require('socket.io');
 
 const expressSession = require('express-session');
@@ -28,11 +28,11 @@ App.set('views', path.join(__dirname, 'views'));
 
 
 // const expressServer=https.createServer({key,cert},App);
-// expressServer.listen('7575', () => { 
-//     console.log('https://192.168.26.122:7575');
+// expressServer.listen('7575',"192.168.70.122", () => { 
+//     console.log('https://192.168.70.122:7575');
 // }) 
 //App.use(bodyParser({extended:true}));
-const io=socket(App.listen("7575",()=>{console.log("https://project-igi-chatting-application.onrender.com")}));
+const io=socket(App.listen("7575",()=>{console.log("http://192.168.150.122:7575")}));
 // const io =socket(expressServer);
 
 App.use(
@@ -64,6 +64,7 @@ const offers=[
 const socketSet=[];
 
 io.on("connection",(socket)=>{
+
 	const {userName,idForMeeting}=socket.handshake.auth.userName;
     const socketIdforMeeting=socket.id;
 	socket.on("addSocketIDs",(rooms)=>{
@@ -111,8 +112,13 @@ io.on("connection",(socket)=>{
             answer:null,
             answererIceCandidate:[],
             communicationType
-        })
-        socket.to(socketSet[0].socketId).emit("newOfferAwaiting",offers.slice(-1));
+        });
+        for(let i of io.sockets.adapter.rooms.get(userName)){
+            console.log(i);
+            if(i!=socket.id)
+                socket.to(i).except(socket.id).emit("newOfferAwaiting",offers.slice(-1));
+                return;
+        }
     });
     socket.on('addIceCandidates',(IceCandidate)=>{
      const {iceUserName,didIOffer,iceCandidate}=IceCandidate;
@@ -155,24 +161,36 @@ io.on("connection",(socket)=>{
     socket.on("join-room",async (data)=>{
         roomObj=await data; 
         socket.join(roomObj.roomId);
+       
         users++;       
       });
 
-    socket.on("disconnect",()=>{console.log("disconnected")});
-    socket.on('send-message',({message,senderId,user,type})=>{
-           // const rooms = io.sockets.adapter.rooms;
-         socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
+    socket.on("disconnect",()=>{
+        socket.leaveAll();
+        console.log("disconnected")});
 
+    socket.on("join-room-notifier",(_)=>{
+        socket.join(_);
+        
+    })
+    socket.on('send-message',({message,senderId,user,type})=>{
+        const uniqueRoom=io.sockets.adapter.rooms;
+        if(roomObj.roomId=="superChat"){
+            socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
+            return;
+        }
+        console.log(uniqueRoom.get(roomObj.roomId[0]));
+        if(uniqueRoom.get(roomObj.roomId[1]).size==1){
+               
+             socket.to(roomObj.roomId[0]).emit("notification",{message,user,type});}
+        else{
+          
+            socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
+        }
     });
     ////// VIDEO MEETING LOGICS
 
-
-    socket.on("sendMsgInMeeting",({roomName,msg})=>{
-          socket.join(roomName);
-          socket.except(socket.id).emit('receive-message-in-meeting',{msg,idForMeeting});
- 
-     });
     });
-module.exports = { App,io };
+module.exports = { App,io }; 
  
   

@@ -1,5 +1,5 @@
 console.log(url);
-const BASE_URL=url;
+const BASE_URL=`https://${url}:7575`
 const getMessage=async(sender,receiver)=>{
     const res=await axios({
         method:"GET",
