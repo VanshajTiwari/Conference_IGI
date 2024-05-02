@@ -13,8 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js" integrity="sha512-TjBzDQIDnc6pWyeM1bhMnDxtWH0QpOXMcVooglXrali/Tj7W569/wd4E8EDjk1CwOAOPSJon1VfcEt1BI4xIrA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>      
         const userName={userName:"<%=user._id%>",idForMeeting:"<%=user.fullname%>"};
-        const url="192.168.70.122";
-        const socket = io(`https://${url}:7575`,{auth:{userName}});
+        const url="https://project-igi-chatting-application.onrender.com";
+        const socket = io(`https://project-igi-chatting-application.onrender.com`,{auth:{userName}});
         </script>
     <script src="/js/Api/apiCalls.js"></script>
     
