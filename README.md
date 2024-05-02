@@ -40,6 +40,7 @@ simultaneously, showcasing its scalability and real-time communication capabilit
 
 ![superChats](https://github.com/VanshajTiwari/Chatting_App/assets/90194253/76033b9b-2c82-4af8-bfbe-0247722d6694)
 ![privateChats](https://github.com/VanshajTiwari/Chatting_App/assets/90194253/212da3f5-01ff-42d8-8c30-13f5aa6d4d87)
+![fileShare](https://github.com/VanshajTiwari/Chatting_App/assets/90194253/27d43700-95e6-4b1b-9a52-7371541bfb81)
 
  #Users Can Voice Call And Video Call
  
