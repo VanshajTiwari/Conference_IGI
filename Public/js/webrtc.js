@@ -43,7 +43,7 @@ async function callVideo(){
 }
 
 async function addAnswer(offer,flag=false){
-    ringtone.stop();
+    ringtone.pause();
     await fetchUserMedia(flag);
     await createPeerConnection(offer,flag); 
     const answer=await PeerConnection.createAnswer({});
@@ -80,8 +80,10 @@ async function createPeerConnection(remoteOffer,flag=false){
         console.log(remoteStream);
         remoteVideoEl.srcObject=remoteStream;
     }
-    else
+    else{
+        console.log(remoteStream);
         audioEl.srcObject=remoteStream;
+    }
     localStream.getTracks().forEach(track=>{
         PeerConnection.addTrack(track,localStream);
     });

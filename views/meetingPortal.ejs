@@ -1,4 +1,7 @@
 <%- include("./commons/boiler") %>
+<script>
+    const meetingNameSpace=io(`/meetings`,{auth:{userName:"<%=user.fullname%>"}});
+</script>
 <body class="w-screen h-screen items-center bg-gray-300 overflow-hidden">
     <div class="w-[100%] h-[100%] rounded-lg">
         <div class="client-- flex flex-wrap w-6/8 h-full">
@@ -7,10 +10,8 @@
                     <video src="" id="videoMeetingEl" controls autoplay class="w-full h-full  rounded-lg"></video>
                 </div>            
                 <div class="other-video flex flex-wrap justify-start overflow-x-auto bg-gray-300 h-[40%]">
-                    <div class="bg-white p-3  text-center rounded-lg m-3 w-[300px] h-[300px]">
-                        <span class="text-2xl">Vanshaj Tiwari</span>
-                        <video src="" controls class="rounded-lg w-full h-[230px] "></video>
-                    </div>
+                        <!--  -->
+                        <!--  -->
                 </div>
             </div>
             <div class="w-[20%] h-full">
@@ -19,11 +20,7 @@
                         <span class="border-2 w-full"></span>
                         <div class="video-chats--box h-[80%] w-[90%] overflow-auto bg-white rounded-lg">
 
-                                    <div class="m-3 float-right clear-both">
-                                        <span class="flex justify-end mr-2">Vanshaj Tiwari</span>
-                                        <div class="bg-gray-200 p-3 rounded-lg">this is Msg</div>
-                                        <span class="text-[12px] float-right text-gray-500">19/12/200</span>
-                                    </div>
+<!--  -->
                         </div>
                         <div class=" absolute bottom-2 bg-gray-400 p-3 rounded-lg">
                             <form action="" class="video-calling-msgbox-form flex justify-center items-center ">
@@ -65,7 +62,9 @@
 
     <script>
         const roomName="<%=roomName%>";
+        const ComUser="<%=user.fullname%>"
         const userNameForMeeting="<%=user.fullname%>";
+        meetingNameSpace.emit("joining",roomName);
     </script>
     <script src="/js/videoMeetingLogics.js"></script>
 </body>

@@ -28,8 +28,8 @@ App.set('views', path.join(__dirname, 'views'));
 
 
 const expressServer=https.createServer({key,cert},App);
-expressServer.listen('7575',"192.168.1.11", () => { 
-    console.log('https://192.168.1.11:7575');
+expressServer.listen('7575',"192.168.70.122", () => { 
+    console.log('https://192.168.70.122:7575');
 }) 
 //App.use(bodyParser({extended:true}));
 // const io=socket(App.listen("7575",()=>{console.log("http://192.168.150.122:7575")}));
@@ -112,8 +112,13 @@ io.on("connection",(socket)=>{
             answer:null,
             answererIceCandidate:[],
             communicationType
-        })
-        socket.to(socketSet[0].socketId).emit("newOfferAwaiting",offers.slice(-1));
+        });
+        for(let i of io.sockets.adapter.rooms.get(userName)){
+            console.log(i);
+            if(i!=socket.id)
+                socket.to(i).except(socket.id).emit("newOfferAwaiting",offers.slice(-1));
+                return;
+        }
     });
     socket.on('addIceCandidates',(IceCandidate)=>{
      const {iceUserName,didIOffer,iceCandidate}=IceCandidate;
@@ -180,16 +185,11 @@ io.on("connection",(socket)=>{
              socket.to(roomObj.roomId[0]).emit("notification",{message,user,type});}
         else{
           
-             socket.to(roomObj.roomId[0]).except(senderId).emit('receive-message',{message,user,type});
+            socket.to(roomObj.roomId).except(senderId).emit('receive-message',{message,user,type});
         }
     });
     ////// VIDEO MEETING LOGICS
 
-
-    socket.on("sendMsgInMeeting",({roomName,msg})=>{
-          socket.except(socket.id).emit('receive-message-in-meeting',{msg,idForMeeting});
- 
-     });
     });
 module.exports = { App,io }; 
  
