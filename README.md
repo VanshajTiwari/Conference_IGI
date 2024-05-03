@@ -27,6 +27,7 @@ simultaneously, showcasing its scalability and real-time communication capabilit
 
 ![login](https://github.com/VanshajTiwari/Chatting_App/assets/90194253/94e579f2-bd79-450b-b2d9-ece86445e5df)
 ![signup](https://github.com/VanshajTiwari/Chatting_App/assets/90194253/633c0c4a-19d2-4f1c-ad77-1e87b91fc45f)
+![institutionDetails](https://github.com/VanshajTiwari/Chatting_App/assets/90194253/f5cebfc7-fa02-4ab4-bd0e-0a2a184a8d19)
 
 # Dashboard
 
