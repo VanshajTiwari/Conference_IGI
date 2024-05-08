@@ -10,6 +10,7 @@ features.
 - If User forgot their password they can request for new password by submit their email address the reset link send to the user email ID.
 - The project utilized EJS for templating, JavaScript for client-side functionality, and Node.js with Express.js for the backend. 
   MongoDB was used as the database to store user information and chat logs.
+- PopUp Notification feature to update the user about upcoming meetings, incoming calls and messages.
 - Socket.IO for real-time communication, WebRTC for video calling functionality, and VSCode for development. Git and GitHub were used for 
   version control, and Tailwind CSS for styling. Postman for API testing and debugging.
 - Increased productivity by 50% by enabling direct file sharing within the application, eliminating the need for WhatsApp transfers.
