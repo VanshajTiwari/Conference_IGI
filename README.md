@@ -1,4 +1,4 @@
-# Chatting_App
+# Conference_IGI
 Deployed Link
 
 https://project-igi-chatting-application.onrender.com
